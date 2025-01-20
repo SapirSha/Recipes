@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.util.List;
 
 import Others.Recipe;
+import Others.User;
 import Exceptions.NoRecipeException;
 
 public interface ISerializer {
@@ -14,11 +15,11 @@ public interface ISerializer {
 	
 	// Save a recipe to the DB. Do nothing if name already exists.
 	// Return true if added successfully and false if not added
-	public void saveRecipe(Recipe recipe) throws IOException;
+	public void saveRecipe(String username, Recipe recipe) throws IOException;
 	
 	// Delete a recipe from the DB. Return true if deleted successfully 
 	// and false if not (if name doesn't exist, do nothing and return false)
-	public void deleteRecipeByName(String name) throws NoRecipeException, IOException;
+	public void deleteRecipeByName(String username, String recipeName) throws NoRecipeException, IOException;
 	
 	// Delete a recipe from the DB. Return true if deleted successfully 
 	// and false if not (if id doesn't exist, do nothing and return false)
@@ -27,10 +28,10 @@ public interface ISerializer {
 	// Receives a recipe and changes the recipe in the DB with the same id
 	// to be equal to the received recipe. Return true if changed successfully 
 	// and false if not (if id doesn't exist in the DB, do nothing and return false)
-	public void editRecipe(Recipe changedRecipe) throws NoRecipeException, IOException;
+	public void editRecipe(String username, Recipe changedRecipe) throws NoRecipeException, IOException;
 	
 	// Retrieve a recipe from the DB. Return null if not found
-	public Recipe getRecipeByName(String name) throws NoRecipeException;
+	public Recipe getRecipeByName(String username, String name) throws NoRecipeException;
 	
 	// Retrieve a recipe from the DB. Return null if not found
 	public Recipe getRecipeById(int id) throws NoRecipeException;
@@ -51,5 +52,12 @@ public interface ISerializer {
 	
 	// Retrieve all of the recipes in the DB of a specific category
 	public List<Recipe> getRecipesByCategory(String category);
-
+	
+	public List<Recipe> getAllUserRecipes(String username);
+	
+	public void saveUser(User user);
+	
+	public void deleteUserByName(String username);
+	
+	public void deleteUderById(int userId);
 }
