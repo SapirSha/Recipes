@@ -29,21 +29,21 @@ public class Service {
 	@Value("${maxInstructionsLen}")
 	private int maxInstructions;
 
-	public void saveRecipe(Recipe recipe) throws InvalidRecipeException, IOException {
+	public void saveRecipe(User user, Recipe recipe) throws InvalidRecipeException, IOException {
 		validate(recipe); // throws InvalidRecipe Exception
 
 		if (serializer.recipeExistsByName(recipe.getName()))
 			throw new InvalidRecipeException("Recipe already exists!\n");
 
-		serializer.saveRecipe(recipe);
+		serializer.saveRecipe(user, recipe);
 	}
 
-	public Recipe getRecipe(String name) throws NoRecipeException {
-		return serializer.getRecipeByName(name);
+	public Recipe getRecipe(User user, String name) throws NoRecipeException {
+		return serializer.getRecipeByName(user, name);
 	}
 
-	public Recipe getRecipeClone(String name) throws CloneNotSupportedException, NoRecipeException {
-		Recipe r = serializer.getRecipeByName(name);
+	public Recipe getRecipeClone(User user, String name) throws CloneNotSupportedException, NoRecipeException {
+		Recipe r = getRecipe(user, name);
 
 		if (r == null) {
 			return null;
@@ -57,18 +57,18 @@ public class Service {
 	}
 
 	public List<Recipe> getAllRecipes() {
-		return serializer.getAllRecipe();
+		return serializer.getAllRecipes();
 	}
 
-	public List<Recipe> getAllRecipesFromCategory(String category) {
-		return serializer.getRecipesByCategory(category);
+	public List<Recipe> getAllRecipesFromCategory(User user, String category) {
+		return serializer.getRecipesByCategory(user, category);
 	}
 
-	public void deleteRecipe(String name) throws InvalidRecipeException, NoRecipeException, IOException {
-		serializer.deleteRecipeByName(name);
+	public void deleteRecipe(User user, Recipe recipe) throws InvalidRecipeException, NoRecipeException, IOException {
+		serializer.deleteRecipeByName(user, recipe);
 	}
 
-	public void editRecipe(Recipe newInfo) throws InvalidRecipeException, IOException, NoRecipeException {
+	public void editRecipe(User user, Recipe newInfo) throws InvalidRecipeException, IOException, NoRecipeException {
 		int id = newInfo.getId();
 
 		validate(newInfo); // throws InvalidRecipeException
@@ -83,7 +83,7 @@ public class Service {
 			}
 		}
 
-		serializer.editRecipe(newInfo);
+		serializer.editRecipe(user, newInfo);
 	}
 
 

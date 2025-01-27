@@ -14,6 +14,20 @@ public class Recipe implements Comparable<Recipe>, Cloneable, Serializable {
 	private Date dateAdded;
 	private Date dateLatestChange;
 	
+	public Recipe() {}
+	
+	public Recipe(String name, String category, String description, List<String> ingredients, List<String> instructions,
+			Date dateAdded, Date dateLatestChange) {
+		super();
+		this.name = name;
+		this.category = category;
+		this.description = description;
+		this.ingredients = ingredients;
+		this.instructions = instructions;
+		this.dateAdded = dateAdded;
+		this.dateLatestChange = dateLatestChange;
+	}
+
 	public int getId() {
 		return id;
 	}

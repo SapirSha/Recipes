@@ -8,34 +8,55 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.mvc.method.annotation.SessionAttributeMethodArgumentResolver;
+
 import javax.annotation.PostConstruct;
 
 import Others.Recipe;
+import Others.User;
+import Exceptions.InvalidRecipeException;
+import Exceptions.InvalidUserException;
 import Exceptions.NoRecipeException;
+import Exceptions.NoUserException;
 
 @Component
 public class FileSerializer implements ISerializer {
 	
-	private List<Recipe> recipes;
+	private List<User> users;
+	private int lastRecipeId;
 	
 	@PostConstruct
 	public void getRecipes() {
-
 		try {
-		FileInputStream fileIn = new FileInputStream("recipes.ser");
-		ObjectInputStream in = new ObjectInputStream(fileIn);
-		recipes = (List<Recipe>) in.readObject();
-		fileIn.close();
-		in.close();
+			FileInputStream fileIn = new FileInputStream("recipes.ser");
+			ObjectInputStream in = new ObjectInputStream(fileIn);
+			users = (List<User>) in.readObject();
+			fileIn.close();
+			in.close();
 		} catch (IOException | ClassNotFoundException e) {
-			recipes = new ArrayList<>();
+			users = new ArrayList<>();
 		}
+		
+		lastRecipeId = findMaxRecipeId();
 	}
 	
-	public void SerializeData(List<Recipe> recipes) throws IOException {
+	private int findMaxRecipeId() {
+		int maxId = 0;
+		
+		for (User user : users) {
+			for (Recipe recipe : user.getRecipes()) {
+				if (recipe.getId() > maxId)
+					maxId = recipe.getId();
+			}
+		}
+		
+		return maxId;
+	}
+	
+	public void SerializeData(List<User> users) throws IOException {
 		FileOutputStream fileOut = new FileOutputStream("recipes.ser");
 		ObjectOutputStream out = new ObjectOutputStream(fileOut);
-		out.writeObject(recipes);
+		out.writeObject(users);
 //			System.out.println("Serialized data is saved in recipes.ser");
 		
 		fileOut.close();
@@ -46,9 +67,11 @@ public class FileSerializer implements ISerializer {
 	@Override
 	public boolean recipeExistsByName(String name) {
 
-		for (Recipe recipe : recipes) {
-			if (recipe.getName().equalsIgnoreCase(name)) {
-				return true;
+		for (User user : users) {
+			for (Recipe recipe : user.getRecipes()) {
+				if (recipe.getName().equalsIgnoreCase(name)) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -56,136 +79,200 @@ public class FileSerializer implements ISerializer {
 
 	@Override
 	public boolean recipeExistsById(int id) {
-
-		for (Recipe recipe : recipes) {
-			if (recipe.getId() == id) {
-				return true;
+		for (User user : users) {
+			for (Recipe recipe : user.getRecipes()) {
+				if (recipe.getId() == id) {
+					return true;
+				}
 			}
 		}
 		return false;
 	}
 
 	@Override
-	public void saveRecipe(Recipe recipe) throws IOException {
+	public void saveRecipe(User user, Recipe recipe) throws IOException, NoUserException, InvalidRecipeException {
+		if (!users.contains(user))
+			throw new NoUserException("User '" + user.getUsername() + "' does not exist.");
 		
-		if (recipes.isEmpty())
-			recipe.setId(1);
-		else
-			recipe.setId(recipes.get(recipes.size() - 1).getId() + 1);
-		
-		recipes.add(recipe);
-
-		
-		SerializeData(recipes);
-	}
-
-	@Override
-	public void deleteRecipeByName(String name) throws NoRecipeException, IOException {
-		
-		for (Recipe recipe : recipes) {
-			if (recipe.getName().equalsIgnoreCase(name)) {
-				recipes.remove(recipe);
-				SerializeData(recipes);
-				return;
-			}
+		for (Recipe r : user.getRecipes()) {
+			if (r.getName().equals(recipe.getName()))
+				throw new InvalidRecipeException("Recipe with the name '" + recipe.getName() + "' already exists.");
 		}
 		
-		throw new NoRecipeException("There are no recipes with the name " + name);
-	}
-
-	@Override
-	public void deleteRecipeById(int id) throws NoRecipeException, IOException {
+		recipe.setId(++lastRecipeId);
 		
-		for (Recipe recipe : recipes) {
-			if (recipe.getId() == id) {
-				recipes.remove(recipe);
-				SerializeData(recipes);
-				return;
-			}
-		}
-		throw new NoRecipeException("There are no recipes with the id " + id);
+		user.addRecipe(recipe);
+
+		SerializeData(users);
 	}
 
 	@Override
-	public void editRecipe(Recipe changedRecipe) throws NoRecipeException, IOException {
-		if(recipes.contains(changedRecipe)) {
-			recipes.set(recipes.indexOf(changedRecipe), changedRecipe);
-			SerializeData(recipes);
+	public void deleteRecipe(User user, Recipe recipe) throws NoRecipeException, IOException, NoUserException {
+		if (!users.contains(user))
+			throw new NoUserException("User '" + user.getUsername() + "' does not exist.");
+		
+		if (!user.getRecipes().contains(recipe))
+			throw new NoRecipeException("Recipe '" + recipe.getName() + "' does not exist.");
+		
+		user.getRecipes().remove(recipe);
+		
+		SerializeData(users);
+	}
+
+	@Override
+	public void editRecipe(User user, Recipe changedRecipe) throws NoRecipeException, IOException, NoUserException {
+		if (!users.contains(user))
+			throw new NoUserException("User '" + user.getUsername() + "' does not exist.");
+		
+		if (user.getRecipes().contains(changedRecipe)) {
+			user.getRecipes().set(users.indexOf(changedRecipe), changedRecipe);
+			SerializeData(users);
 			return;
 		}
 		
-		throw new NoRecipeException("There is no recipe with the id " + changedRecipe.getId());
+		throw new NoRecipeException("Recipe '" + changedRecipe.getName() + "' does not exist.");
 	}
 
 	@Override
-	public Recipe getRecipeByName(String name) throws NoRecipeException {
+	public Recipe getRecipeByName(User user, String name) throws NoRecipeException, NoUserException {
+		if (!users.contains(user))
+			throw new NoUserException("User '" + user.getUsername() + "' does not exist.");
 		
-		for (Recipe recipe : recipes) {
+		for (Recipe recipe : user.getRecipes()) {
 			if (recipe.getName().equalsIgnoreCase(name)) {
 				return recipe;
 			}
 		}
 		
-		throw new NoRecipeException("There is no recipe with this name");
+		throw new NoRecipeException("Recipe '" + name + "' does not exist.");
 	}
 
 	@Override
 	public Recipe getRecipeById(int id) throws NoRecipeException {
-		
-		for (Recipe recipe : recipes) {
-			if (recipe.getId() == id) {
-				return recipe;
+		for (User user : users) {
+			for (Recipe recipe : user.getRecipes()) {
+				if (recipe.getId() == id) {
+					return recipe;
+				}
 			}
 		}
 		
-		throw new NoRecipeException("There is no recipe with this name");
+		throw new NoRecipeException("Recipe with the id " + id + " does not exist.");
 	}
 
 	@Override
 	public List<Integer> getRecipeIds() {
 		List<Integer> recipeIds = new ArrayList<Integer>();
-		for (Recipe recipe : recipes) {
-			recipeIds.add(recipe.getId());
+		
+		for (User user : users) {
+			for (Recipe recipe : user.getRecipes()) {
+				recipeIds.add(recipe.getId());
+			}
 		}
+		
 		return recipeIds;
 	}
 
 	@Override
 	public List<String> getRecipeNames() {
 		List<String> recipeNames = new ArrayList<String>();
-		for (Recipe recipe : recipes) {
-			recipeNames.add(recipe.getName());
+		
+		for (User user : users) {
+			for (Recipe recipe : user.getRecipes()) {
+				recipeNames.add(recipe.getName());
+			}
 		}
+		
 		return recipeNames;
 	}
 
 	@Override
 	public List<Integer> getRecipesIdByCategory(String category) {
 		List<Integer> recipeIds = new ArrayList<Integer>();
-		for (Recipe recipe : recipes) {
-			if (recipe.getCategory().equalsIgnoreCase(category))
-				recipeIds.add(recipe.getId());
+		
+		for (User user : users) {
+			for (Recipe recipe : user.getRecipes()) {
+				if (recipe.getCategory().equalsIgnoreCase(category))
+					recipeIds.add(recipe.getId());
+			}
 		}
+		
 		return recipeIds;
 	}
 
 	@Override
-	public List<Recipe> getAllRecipe() {
+	public List<Recipe> getAllRecipes() {
 		ArrayList<Recipe> tempRecipes = new ArrayList<>();
-		for (Recipe recipe : recipes) {
-			tempRecipes.add(recipe);
+		
+		for (User user : users) {
+			for (Recipe recipe : user.getRecipes()) {
+				tempRecipes.add(recipe);
+			}
 		}
+		
 		return tempRecipes;
 	}
 
 	@Override
-	public List<Recipe> getRecipesByCategory(String category) {
+	public List<Recipe> getRecipesByCategory(User user, String category) throws NoUserException {
+		if (!users.contains(user))
+			throw new NoUserException("User '" + user.getUsername() + "' does not exist.");
+		
 		ArrayList<Recipe> tempRecipes = new ArrayList<>();
-		for (Recipe recipe : recipes) {
+		
+		for (Recipe recipe : user.getRecipes()) {
 			if (recipe.getCategory().equalsIgnoreCase(category))
 				tempRecipes.add(recipe);
 		}
+		
 		return tempRecipes;
+	}
+
+	@Override
+	public List<Recipe> getAllUserRecipes(User user) {
+		return user.getRecipes();
+	}
+
+	@Override
+	public void saveUser(User user) throws InvalidUserException {
+		if (user.getUsername() == null || user.getPassword() == null)
+			throw new InvalidUserException("User must have username and password!");
+		
+		for (User u : users) {
+			if (u.getUsername().equals(user.getUsername())) {
+				throw new InvalidUserException("User with the name '" + user.getUsername() + "' already exists.");
+			}
+		}
+		
+		users.add(user);
+	}
+
+	@Override
+	public void deleteUser(User user) throws NoUserException {
+		if (!users.contains(user))
+			throw new NoUserException("User '" + user.getUsername() + "' does not exist.");
+		
+		users.remove(user);
+	}
+
+	@Override
+	public User getUserByName(String username) throws NoUserException {
+		for (User user : users) {
+			if (user.getUsername().equals(username))
+				return user;
+		}
+		
+		throw new NoUserException("User with the name '" + username + "' does not exist.");
+	}
+
+	@Override
+	public User getUserById(int id) throws NoUserException {
+		for (User user : users) {
+			if (user.getId() == id)
+				return user;
+		}
+		
+		throw new NoUserException("User with the id " + id + " does not exist.");
 	}
 
 }

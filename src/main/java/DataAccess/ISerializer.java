@@ -4,7 +4,10 @@ import java.util.List;
 
 import Others.Recipe;
 import Others.User;
+import Exceptions.InvalidRecipeException;
+import Exceptions.InvalidUserException;
 import Exceptions.NoRecipeException;
+import Exceptions.NoUserException;
 
 public interface ISerializer {
 	// Checks if a recipe exists in the DB by its name
@@ -15,23 +18,19 @@ public interface ISerializer {
 	
 	// Save a recipe to the DB. Do nothing if name already exists.
 	// Return true if added successfully and false if not added
-	public void saveRecipe(String username, Recipe recipe) throws IOException;
+	public void saveRecipe(User user, Recipe recipe) throws IOException, NoUserException, InvalidRecipeException;
 	
 	// Delete a recipe from the DB. Return true if deleted successfully 
 	// and false if not (if name doesn't exist, do nothing and return false)
-	public void deleteRecipeByName(String username, String recipeName) throws NoRecipeException, IOException;
-	
-	// Delete a recipe from the DB. Return true if deleted successfully 
-	// and false if not (if id doesn't exist, do nothing and return false)
-	public void deleteRecipeById(int id) throws NoRecipeException, IOException;
+	public void deleteRecipe(User user, Recipe recipe) throws NoRecipeException, IOException, NoUserException;
 	
 	// Receives a recipe and changes the recipe in the DB with the same id
 	// to be equal to the received recipe. Return true if changed successfully 
 	// and false if not (if id doesn't exist in the DB, do nothing and return false)
-	public void editRecipe(String username, Recipe changedRecipe) throws NoRecipeException, IOException;
+	public void editRecipe(User user, Recipe changedRecipe) throws NoRecipeException, IOException, NoUserException;
 	
 	// Retrieve a recipe from the DB. Return null if not found
-	public Recipe getRecipeByName(String username, String name) throws NoRecipeException;
+	public Recipe getRecipeByName(User user, String recipeName) throws NoRecipeException, NoUserException;
 	
 	// Retrieve a recipe from the DB. Return null if not found
 	public Recipe getRecipeById(int id) throws NoRecipeException;
@@ -48,16 +47,18 @@ public interface ISerializer {
 	public List<Integer> getRecipesIdByCategory(String category);
 	
 	// Retrieve all of the recipes in the DB
-	public List<Recipe> getAllRecipe();
+	public List<Recipe> getAllRecipes();
 	
 	// Retrieve all of the recipes in the DB of a specific category
-	public List<Recipe> getRecipesByCategory(String category);
+	public List<Recipe> getRecipesByCategory(User user, String category) throws NoUserException;
 	
-	public List<Recipe> getAllUserRecipes(String username);
+	public List<Recipe> getAllUserRecipes(User user);
 	
-	public void saveUser(User user);
+	public void saveUser(User user) throws InvalidUserException;
 	
-	public void deleteUserByName(String username);
+	public void deleteUser(User user) throws NoUserException;
 	
-	public void deleteUderById(int userId);
+	public User getUserByName(String username) throws NoUserException;
+	
+	public User getUserById(int id) throws NoUserException;
 }
