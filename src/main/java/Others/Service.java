@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import DataAccess.ISerializer;
 import Exceptions.InvalidRecipeException;
 import Exceptions.NoRecipeException;
+import Exceptions.NoUserException;
 
 @Component
 @PropertySource("classpath:params.properties")
@@ -29,7 +30,7 @@ public class Service {
 	@Value("${maxInstructionsLen}")
 	private int maxInstructions;
 
-	public void saveRecipe(User user, Recipe recipe) throws InvalidRecipeException, IOException {
+	public void saveRecipe(User user, Recipe recipe) throws InvalidRecipeException, IOException, NoUserException {
 		validate(recipe); // throws InvalidRecipe Exception
 
 		if (serializer.recipeExistsByName(recipe.getName()))
@@ -38,11 +39,11 @@ public class Service {
 		serializer.saveRecipe(user, recipe);
 	}
 
-	public Recipe getRecipe(User user, String name) throws NoRecipeException {
+	public Recipe getRecipe(User user, String name) throws NoRecipeException, NoUserException {
 		return serializer.getRecipeByName(user, name);
 	}
 
-	public Recipe getRecipeClone(User user, String name) throws CloneNotSupportedException, NoRecipeException {
+	public Recipe getRecipeClone(User user, String name) throws CloneNotSupportedException, NoRecipeException, NoUserException {
 		Recipe r = getRecipe(user, name);
 
 		if (r == null) {
@@ -60,15 +61,15 @@ public class Service {
 		return serializer.getAllRecipes();
 	}
 
-	public List<Recipe> getAllRecipesFromCategory(User user, String category) {
+	public List<Recipe> getAllRecipesFromCategory(User user, String category) throws NoUserException {
 		return serializer.getRecipesByCategory(user, category);
 	}
 
-	public void deleteRecipe(User user, Recipe recipe) throws InvalidRecipeException, NoRecipeException, IOException {
-		serializer.deleteRecipeByName(user, recipe);
+	public void deleteRecipe(User user, Recipe recipe) throws InvalidRecipeException, NoRecipeException, IOException, NoUserException {
+		serializer.deleteRecipe(user, recipe);
 	}
 
-	public void editRecipe(User user, Recipe newInfo) throws InvalidRecipeException, IOException, NoRecipeException {
+	public void editRecipe(User user, Recipe newInfo) throws InvalidRecipeException, IOException, NoRecipeException, NoUserException {
 		int id = newInfo.getId();
 
 		validate(newInfo); // throws InvalidRecipeException
