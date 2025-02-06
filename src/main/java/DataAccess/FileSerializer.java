@@ -38,6 +38,22 @@ public class FileSerializer implements ISerializer {
 		}
 		
 		lastRecipeId = findMaxRecipeId();
+		
+		// for testing (without an actual DB)
+		try {
+			saveUser(new User("admin", "admin"));
+			saveUser(new User("user1", "1234"));
+			saveUser(new User("user2", "4321"));
+			
+			System.out.println("printing all users:");
+			
+			for (User u : users) {
+				System.out.println(u);
+			}
+		}
+		catch (InvalidUserException e) {
+			System.out.println("Tried to create an invalid user!");
+		}
 	}
 	
 	private int findMaxRecipeId() {

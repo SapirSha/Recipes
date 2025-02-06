@@ -1,4 +1,5 @@
 package Others;
+import java.util.ArrayList;
 import java.util.List;
 import Others.Recipe;
 
@@ -10,11 +11,14 @@ public class User {
 	private String password;
 	
 	
-	public User() {}
+	public User() {
+		recipes = new ArrayList<>();
+	}
 	
 	public User(String username, String password) {
 		this.username = username;
 		this.password = password;
+		this.recipes = new ArrayList<>();
 	}
 	
 	public int getId() {
@@ -62,18 +66,22 @@ public class User {
 	
 	@Override
 	public String toString() {
-		String msg =String.format("Username %s, Password: ********\n", this.username);
+		String msg =String.format("Username %s, Password: %s\n", this.username, this.password);
+		
 		for (Recipe recipe : recipes) 
 			msg += recipe + "\n";
 		
 		return msg;
 	}
-	
-	
-	
-	
-	
-	
-	
+
+	@Override
+	public boolean equals(Object arg0) {
+		if (!(arg0 instanceof User))
+			return false;
+		
+		User other = (User)arg0;
+		
+		return this.username.equals(other.username) && this.password.equals(other.password);
+	}
 	
 }

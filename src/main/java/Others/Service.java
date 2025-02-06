@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import DataAccess.ISerializer;
 import Exceptions.InvalidRecipeException;
+import Exceptions.InvalidUserException;
 import Exceptions.NoRecipeException;
 import Exceptions.NoUserException;
 
@@ -86,7 +87,14 @@ public class Service {
 
 		serializer.editRecipe(user, newInfo);
 	}
-
+	
+	public User getUserByName(String username) throws NoUserException {
+		return serializer.getUserByName(username);
+	}
+	
+	public void saveUser(User user) throws InvalidUserException {
+		serializer.saveUser(user);
+	}
 
 	// VALIDATIONS //
 
