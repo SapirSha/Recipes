@@ -26,13 +26,16 @@ public class LogInController {
     }
     
     @RequestMapping("/LogIn")
-    public String login(Model  model) {
+    public String login(@RequestParam(value = "error", required = false) String error, Model model) {
     	User user = new User();
     	
     	model.addAttribute("user", user);
     	
-    	System.out.println("LOGIN");
-    	
+    	if (error != null)
+    		model.addAttribute("loginErrorMessage", "Invalid username or password.");
+    	else
+    		model.addAttribute("loginErrorMessage", "");
+    	    	
     	return "LogIn";
     }
     
@@ -56,7 +59,7 @@ public class LogInController {
 		}
 		
 		System.out.println("FAILED LOGIN");
-		return "redirect:/LogIn";
+		return "redirect:/LogIn?error=true";
 	}
     
     @RequestMapping("/WASD")  
