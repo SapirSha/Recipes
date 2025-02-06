@@ -12,6 +12,8 @@
     </style>
 </head>
 <body>
+	<h1>Login</h1>
+	<br>
     <form:form action="processLogin" method="POST" modelAttribute="user">
         User Name: <form:input type="text" path="username" />
         <br><br>
