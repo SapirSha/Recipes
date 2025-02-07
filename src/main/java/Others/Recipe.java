@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Recipe implements Comparable<Recipe>, Cloneable, Serializable {
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private String name;
 	private String category;
