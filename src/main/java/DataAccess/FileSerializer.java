@@ -39,21 +39,23 @@ public class FileSerializer implements ISerializer {
 		
 		lastRecipeId = findMaxRecipeId();
 		
-		// for testing (without an actual DB)
-		try {
-			saveUser(new User("admin", "admin"));
-			saveUser(new User("user1", "1234"));
-			saveUser(new User("user2", "4321"));
-			
-			System.out.println("printing all users:");
-			
-			for (User u : users) {
-				System.out.println(u);
-			}
-		}
-		catch (InvalidUserException e) {
-			System.out.println("Tried to create an invalid user!");
-		}
+//		// for testing (without an actual DB)
+//		try {
+//			saveUser(new User("admin", "admin"));
+//			saveUser(new User("user1", "1234"));
+//			saveUser(new User("user2", "4321"));
+//			
+//			System.out.println("printing all users:");
+//			
+//			for (User u : users) {
+//				System.out.println(u);
+//			}
+//		}
+//		catch (InvalidUserException e) {
+//			System.out.println("Tried to create an invalid user!");
+//		} catch (IOException e) {
+//			System.out.println("IO exception");
+//		}
 	}
 	
 	private int findMaxRecipeId() {
@@ -250,7 +252,7 @@ public class FileSerializer implements ISerializer {
 	}
 
 	@Override
-	public void saveUser(User user) throws InvalidUserException {
+	public void saveUser(User user) throws InvalidUserException, IOException {
 		if (user.getUsername() == null || user.getPassword() == null)
 			throw new InvalidUserException("User must have username and password!");
 		
@@ -260,15 +262,26 @@ public class FileSerializer implements ISerializer {
 			}
 		}
 		
+		if (users.size() > 0) {
+			user.setId(users.get(users.size() - 1).getId() + 1);
+		}
+		else {
+			user.setId(1);
+		}
+		
 		users.add(user);
+		
+		SerializeData(users);
 	}
 
 	@Override
-	public void deleteUser(User user) throws NoUserException {
+	public void deleteUser(User user) throws NoUserException, IOException {
 		if (!users.contains(user))
 			throw new NoUserException("User '" + user.getUsername() + "' does not exist.");
 		
 		users.remove(user);
+		
+		SerializeData(users);
 	}
 
 	@Override

@@ -92,7 +92,7 @@ public class Service {
 		return serializer.getUserByName(username);
 	}
 	
-	public void saveUser(User user) throws InvalidUserException {
+	public void saveUser(User user) throws InvalidUserException, IOException {
 		serializer.saveUser(user);
 	}
 

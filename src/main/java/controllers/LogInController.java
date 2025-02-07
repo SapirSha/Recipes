@@ -1,5 +1,7 @@
 package controllers;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,6 +90,9 @@ public class LogInController {
 			}
 			catch (InvalidUserException e) {
 				error = "Username already exists";
+			} catch (IOException e) {
+				error = "";
+				e.printStackTrace();
 			}
 		}
 		

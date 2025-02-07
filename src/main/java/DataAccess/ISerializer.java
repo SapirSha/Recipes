@@ -54,9 +54,9 @@ public interface ISerializer {
 	
 	public List<Recipe> getAllUserRecipes(User user);
 	
-	public void saveUser(User user) throws InvalidUserException;
+	public void saveUser(User user) throws InvalidUserException, IOException;
 	
-	public void deleteUser(User user) throws NoUserException;
+	public void deleteUser(User user) throws NoUserException, IOException;
 	
 	public User getUserByName(String username) throws NoUserException;
 	
