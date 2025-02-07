@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -26,7 +27,7 @@ public class LogInController {
     }
     
     @RequestMapping("/LogIn")
-    public String login(@RequestParam(value = "error", required = false) String error, Model model) {
+    public String showLogIn(@RequestParam(value = "error", required = false) String error, Model model) {
     	User user = new User();
     	
     	model.addAttribute("user", user);
@@ -39,15 +40,11 @@ public class LogInController {
     	return "LogIn";
     }
     
-	@RequestMapping("/processLogin")
+	@PostMapping("/processLogin")
 	public String processLogin(@ModelAttribute("user") User user, HttpServletRequest request) {
-		System.out.println(user);
-		
 		try {
 			User savedUser = service.getUserByName(user.getUsername());
-			
-			System.out.println(savedUser);
-			
+						
 			if (savedUser.getPassword().equals(user.getPassword())) {
 				// create session and put user object on session
 				request.getSession().setAttribute("user", savedUser);
@@ -61,6 +58,41 @@ public class LogInController {
 		System.out.println("FAILED LOGIN");
 		return "redirect:/LogIn?error=true";
 	}
+	
+	@RequestMapping("/SignUp")
+	public String showSignUp(@RequestParam(value = "error", required = false) String error, Model model) {
+    	User user = new User();
+    	
+    	model.addAttribute("user", user);
+    	
+    	if (error != null)
+    		model.addAttribute("signupErrorMessage", error);
+    	else
+    		model.addAttribute("signupErrorMessage", "");
+    	    	
+    	return "SignUp";
+	}
+	
+	@PostMapping("/processSignup")
+    public String processSignup(@ModelAttribute("user") User user) {
+		String error;
+		
+		if (user.getUsername().length() == 0 || user.getPassword().length() == 0)
+			error = "Empty username or password are not allowed!";
+		else {
+			try {
+				service.saveUser(user);
+				
+		        System.out.println("User signup successful: " + user);
+		        return "SignUpSuccess";  // Redirect to a success page
+			}
+			catch (InvalidUserException e) {
+				error = "Username already exists";
+			}
+		}
+		
+		return "redirect:/SignUp?error=" + error;
+    }
     
     @RequestMapping("/WASD")  
     public String showWASDPage() {
