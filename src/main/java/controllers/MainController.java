@@ -64,6 +64,8 @@ public class MainController {
 		return "MyRecipes";
 	}
     
+    
+    
     @PostMapping("/remove")
     public String removeRecipe(@RequestParam(value = "recipeRadio", required = false) String selectedIndex, 
     		HttpServletRequest request) {

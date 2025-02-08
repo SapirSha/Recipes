@@ -18,23 +18,23 @@
             <form:form method="POST" modelAttribute="recipe" action="/Recipes/AddRecipe">
                 <div class="editable">
                     <strong>Name:</strong>
-                    <input id="new-recipe-name" class="input-field" />
+                    <input id="new-recipe-name" name="name" class="input-field" />
                 </div>
                 <div class="editable">
                     <strong>Category:</strong>
-                    <input id="new-recipe-category" class="input-field" />
+                    <input id="new-recipe-category" name="category" class="input-field" />
                 </div>
                 <div class="editable">
                     <strong>Description:</strong>
-                    <textarea id="new-recipe-description" class="input-field" oninput="autoExpandTextarea(event)"></textarea>
+                    <textarea id="new-recipe-description" name="description" class="input-field" oninput="autoExpandTextarea(event)"></textarea>
                 </div>
                 <div class="editable">
                     <strong>Ingredients:</strong>
-                    <textarea id="new-recipe-ingredients" class="input-field" oninput="autoExpandTextarea(event)"></textarea>
+                    <textarea id="new-recipe-ingredients" name="ingredients" class="input-field" oninput="autoExpandTextarea(event)"></textarea>
                 </div>
                 <div class="editable">
                     <strong>Instructions:</strong>
-                    <textarea id="new-recipe-instructions" class="input-field" oninput="autoExpandTextarea(event)"></textarea>
+                    <textarea id="new-recipe-instructions" name="instructions" class="input-field" oninput="autoExpandTextarea(event)"></textarea>
                 </div>
                 <div class="edit-button">
                     <button type="submit" class="save-btn">Add Recipe</button>
