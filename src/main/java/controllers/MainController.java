@@ -14,14 +14,25 @@ import Others.User;
 public class MainController {
 
 	@RequestMapping("/")
-	public String showPage() {
-		System.out.println("HELLOO __ _ _ _ _");
+	public String showPage(Model model, HttpServletRequest request) {
+		if (request.getSession(false) != null 
+				&& request.getSession().getAttribute("user") != null) { // Check if the user has a session
+			User user = (User)request.getSession().getAttribute("user");
+			
+			model.addAttribute("helloMessage", "Hello " + user.getUsername() + "! ");
+		}
+		else
+			model.addAttribute("helloMessage", "");
+		
 		return "MainPage";
 	}
 
     @RequestMapping("/MyRecipes")
-	public String showMyRecipesPage() {
-		System.out.println("HEREAWSD");
+	public String showMyRecipesPage(HttpServletRequest request) {
+    	if (request.getSession(false) == null) // Check if the user has a session
+			return "redirect:/";
+    	
+		System.out.println("My recipes");
 		return "MyRecipes";
 	}
 

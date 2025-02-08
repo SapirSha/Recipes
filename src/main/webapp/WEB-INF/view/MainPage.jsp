@@ -11,6 +11,7 @@
     <%@ include file="common/header.jsp" %>
     <div class="content">
         <h1>Main Page</h1>
+        <P>${helloMessage} </P>
         <p>Welcome to the main page of Recipes!</p>
     </div>
     <%@ include file="common/LoginSignupModal.jsp" %>

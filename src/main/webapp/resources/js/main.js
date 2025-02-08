@@ -4,7 +4,7 @@
         const signUpError = urlParams.get('SignUpError');
         const signUpSuccess= urlParams.get('SignUpSuccess');
         
-        if(signUpError || logInError || signUpSuccess){
+        if(signUpError || logInError || signUpSuccess) {
             var modal = document.getElementById("modal");
             var modalContent = document.querySelector(".modal-content");
             var closeBtn = document.getElementsByClassName("close")[0];
