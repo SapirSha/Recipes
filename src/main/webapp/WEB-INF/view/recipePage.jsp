@@ -16,7 +16,6 @@
     </title>
 </head>
 <body>
-
     <h1>
         <% actionType = (String) request.getAttribute("actionType");
            if ("v".equals(actionType)) { %>

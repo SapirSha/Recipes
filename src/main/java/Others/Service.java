@@ -136,11 +136,11 @@ public class Service {
 		return desc != null && !desc.trim().replaceAll("[ \n\t]", "").isEmpty() && desc.length() <= maxDescriptionLength;
 	}
 
-	public boolean isValidIngredients(List<String> ingredients) {
-		return ingredients != null && !ingredients.isEmpty() && ingredients.size() <= maxIngredients;
+	public boolean isValidIngredients(String ingredients) {
+		return ingredients != null && !ingredients.trim().replaceAll("[ \n\t]", "").isEmpty() && ingredients.length() <= maxIngredients;
 	}
 
-	public boolean isValidInstructions(List<String> instructions) {
-		return instructions != null && !instructions.isEmpty() && instructions.size() <= maxInstructions;
+	public boolean isValidInstructions(String instructions) {
+		return instructions != null && !instructions.trim().replaceAll("[ \n\t]", "").isEmpty() && instructions.length() <= maxInstructions;
 	}
 }

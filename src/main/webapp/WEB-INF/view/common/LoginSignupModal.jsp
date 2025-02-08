@@ -8,7 +8,7 @@
 
     <div class="modal-content">
         <span class="close">&times;</span>
-
+        
         <div class="tab">
             <button id="loginTabBtn" class="active">Login</button>
             <button id="signUpTabBtn">Sign-Up</button>

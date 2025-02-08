@@ -10,14 +10,14 @@ public class Recipe implements Comparable<Recipe>, Cloneable, Serializable {
 	private String name;
 	private String category;
 	private String description;
-	private List<String> ingredients;
-	private List<String> instructions;
+	private String ingredients;
+	private String instructions;
 	private Date dateAdded;
 	private Date dateLatestChange;
 	
 	public Recipe() {}
 	
-	public Recipe(String name, String category, String description, List<String> ingredients, List<String> instructions,
+	public Recipe(String name, String category, String description, String ingredients, String instructions,
 			Date dateAdded, Date dateLatestChange) {
 		super();
 		this.name = name;
@@ -60,18 +60,18 @@ public class Recipe implements Comparable<Recipe>, Cloneable, Serializable {
 		this.description = description;
 	}
 	
-	public List<String> getIngredients() {
+	public String getIngredients() {
 		return ingredients;
 	}
-	public void setIngredients(List<String> ingredients) {
+	public void setIngredients(String ingredients) {
 		this.ingredients = ingredients;
 	}
 	
-	public List<String> getInstructions() {
+	public String getInstructions() {
 		return instructions;
 	}
 	
-	public void setInstructions(List<String> instructions) {
+	public void setInstructions(String instructions) {
 		this.instructions = instructions;
 	}
 	
@@ -122,14 +122,6 @@ public class Recipe implements Comparable<Recipe>, Cloneable, Serializable {
 		 Recipe clonedRecipe = (Recipe) super.clone();
 		 clonedRecipe.dateAdded = (Date) dateAdded.clone();
 		 clonedRecipe.dateLatestChange = (Date) dateLatestChange.clone();
-		 
-		  if (ingredients != null) {
-		        clonedRecipe.ingredients = new ArrayList<>(ingredients);
-		  }
-		  if (instructions != null) {
-		        clonedRecipe.instructions = new ArrayList<>(instructions);
-		  }
-		 
 		 
 		return clonedRecipe;
 	}
