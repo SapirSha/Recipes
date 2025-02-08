@@ -43,7 +43,8 @@ public class MainController {
 	}
 
     @RequestMapping("/MyRecipes")
-	public String showMyRecipesPage(Model model, HttpServletRequest request) {
+	public String showMyRecipesPage(Model model,
+			@RequestParam(value = "returnUrl", required = false) String returnUrl, HttpServletRequest request) {
     	if (request.getSession(false) == null || request.getSession().getAttribute("user") == null) // Check if the user has a session
 			return "redirect:/";
     	

@@ -73,9 +73,9 @@ public class RecipeController {
 	}
 
     @PostMapping("/AddRecipe")
-    public String addRecipe(@ModelAttribute("recipe") Recipe recipe) {
+    public String addRecipe(@ModelAttribute("AddRecipe") Recipe recipe) {
         System.out.println("Adding new recipe: " + recipe);
-        return "redirect:/";
+        return "redirect:/MyRecipes?RecipeCreated=true";
     }
 	
 	@PostMapping("/saveRecipe")
@@ -97,7 +97,7 @@ public class RecipeController {
 		return "WASD";
 	}
 	
-	@PostMapping("/createRecipe")
+	@PostMapping("/CreateRecipe")
 	public String createRecipeProcess(@ModelAttribute("recipe") Recipe recipe, HttpServletRequest request) {
 		try {
 			User user = (User)request.getAttribute("user");
