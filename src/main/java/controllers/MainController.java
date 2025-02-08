@@ -34,8 +34,10 @@ public class MainController {
 			
 			model.addAttribute("helloMessage", "Hello " + user.getUsername() + "! ");
 		}
-		else
+		else {
 			model.addAttribute("helloMessage", "");
+			model.addAttribute("isNotAuthorized", true);
+		}
 		
 		return "MainPage";
 	}
@@ -86,4 +88,14 @@ public class MainController {
     	return "redirect:/MyRecipes";
     }
     
+    @RequestMapping("/logout")
+    public String logoutOfUser(HttpServletRequest request) {
+    	if (request.getSession(false) == null 
+    			|| request.getSession().getAttribute("user") == null) // Check if the user has a session
+			return "redirect:/";
+    	
+    	request.getSession().invalidate();
+    	
+    	return "redirect:/";
+    }
 }
