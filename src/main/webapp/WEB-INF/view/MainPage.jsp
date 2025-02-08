@@ -4,8 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Recipes</title>
-    <link rel="stylesheet" type="text/css" href="resources/css/main.css">
-    <script type="text/javascript" src="resources/js/main.js"></script>
 </head>
 <body>
     <%@ include file="common/header.jsp" %>

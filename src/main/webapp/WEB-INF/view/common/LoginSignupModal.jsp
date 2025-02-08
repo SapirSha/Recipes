@@ -1,5 +1,15 @@
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<!-- The Modal -->
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recipes</title>
+    <link rel="stylesheet" type="text/css" href="resources/css/main.css">
+    <script type="text/javascript" src="resources/js/main.js"></script>
+</head>
+<body>
 <div id="modal" class="modal">
 	<%
 	String contextPath = request.getContextPath();
@@ -50,3 +60,4 @@
         </div>
     </div>
 </div>
+</body>
