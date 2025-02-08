@@ -2,6 +2,7 @@ package controllers;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -117,7 +118,10 @@ public class RecipeController {
     }
 	
 	@PostMapping("/SaveRecipe")
-	public String editRecipeProcess(@ModelAttribute("recipe") Recipe recipe, HttpServletRequest request) {
+	public String editRecipeProcess(@ModelAttribute("recipe") Recipe recipe, HttpServletRequest request, Model model) {
+		if (request.getSession(false) == null || request.getSession().getAttribute("user") == null) // Check if the user has a session
+			return "redirect:/";
+		
 		System.out.println("SAVE RECIPE: " + recipe);
 		
 		try {
@@ -134,8 +138,16 @@ public class RecipeController {
 		} catch (NoUserException e) {
 			e.printStackTrace();
 		}
+    			
+		List<Recipe> recipeList = ((User)request.getSession().getAttribute("user")).getRecipes();
 		
-		return "WASD";
+		for (Recipe r : recipeList) {
+			System.out.println(r);
+		}
+		
+		model.addAttribute("recipeList", recipeList);
+		
+		return "MyRecipes";
 	}
 	
 	@PostMapping("/CreateRecipe")
