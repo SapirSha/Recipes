@@ -11,6 +11,7 @@
     
 </head>
 <body>
+<div class="recipe-editor" style="display:contents">
     <div class="recipe-container">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
@@ -44,5 +45,6 @@
             </form:form>
         </div>
     </div>
+</div>
 </body>
 </html>

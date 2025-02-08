@@ -1,13 +1,12 @@
 @charset "ISO-8859-1";
 
 .add-recipe-modal {
-  /* Replace body styles with container styles */
   font-family: 'Arial', sans-serif;
   background-color: #f2f2f2;
   margin: 0;
   padding: 20px;
   height: 100%;
-  overflow: hidden; /* Prevent container scroll */
+  overflow: hidden;
   
   h1 {
       color: #333;
@@ -15,9 +14,9 @@
   
   .recipe-container {
       display: flex;
-      opacity: 0; /* Start fully hidden */
-      pointer-events: none; /* Prevent interaction when hidden */
-      transition: opacity 0.5s ease-in-out; /* Smooth fade-in/fade-out */
+      opacity: 0; 
+      pointer-events: none; 
+      transition: opacity 0.5s ease-in-out;
       
       position: fixed;
       z-index: 1;
@@ -36,12 +35,13 @@
       padding: 30px;
       border: 1px solid #888;
       width: 90%;
-      max-width: 600px;
-      max-height: 90%; /* Ensure the modal doesn't go off-screen */
-      overflow-y: auto; /* Enable vertical scrolling */
+      max-width: 75%;
+      max-height: 125%; 
+      overflow-y: auto;
       border-radius: 12px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       position: relative;
+      margin:0;
       
       /* Hide scrollbar */
       scrollbar-width: none; /* Firefox */

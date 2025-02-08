@@ -75,6 +75,10 @@ public class RecipeController {
     @PostMapping("/AddRecipe")
     public String addRecipe(@ModelAttribute("AddRecipe") Recipe recipe) {
         System.out.println("Adding new recipe: " + recipe);
+        
+        
+        
+        
         return "redirect:/MyRecipes?RecipeCreated=true";
     }
 	
