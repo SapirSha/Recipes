@@ -123,15 +123,15 @@ public class RecipeController {
 		try {
 			User user = (User)request.getSession().getAttribute("user");
 
-			System.out.println("USER-------------" + service.getUserByName(user.getUsername()));
-			/*service.editRecipe(service.getUserByName(user.getUsername()), recipe);
+//			System.out.println("USER-------------" + service.getUserByName(user.getUsername()));
+			service.editRecipe(user, recipe);
 		}
 		catch (NoRecipeException e) {
 		} catch (InvalidRecipeException e) {
-			return "redirect:/recipe/edit?error=Invlid recipe";
+			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		*/} catch (NoUserException e) {
+		} catch (NoUserException e) {
 			e.printStackTrace();
 		}
 		

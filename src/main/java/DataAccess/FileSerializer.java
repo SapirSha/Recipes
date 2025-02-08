@@ -169,7 +169,7 @@ public class FileSerializer implements ISerializer {
 			throw new NoUserException("User '" + user.getUsername() + "' does not exist.");
 		
 		if (user.getRecipes().contains(changedRecipe)) {
-			user.getRecipes().set(users.indexOf(changedRecipe), changedRecipe);
+			user.getRecipes().set(user.getRecipes().indexOf(changedRecipe), changedRecipe);
 			SerializeData(users);
 			return;
 		}
