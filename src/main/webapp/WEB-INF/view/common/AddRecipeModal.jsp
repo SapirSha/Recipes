@@ -10,6 +10,7 @@
     <script type="text/javascript" src="resources/js/AddRecipeModal.js"></script>
 </head>
 <body>
+<div class="add-recipe-modal" style="display: contents">
     <div id="addRecipeModal" class="recipe-container">
         <div class="modal-content">
             <span class="close" onclick="closeModal('addRecipeModal')">&times;</span>
@@ -41,5 +42,6 @@
             </form:form>
         </div>
     </div>
+</div>
 </body>
 </html>
