@@ -16,16 +16,14 @@
         <br>
         <br>
         
-        <div class="recipe-button-container">
-            <form method="post">  <!-- Added a form tag -->
-                <button type="submit" formaction="create">Create</button>
-                <button type="submit" formaction="show">Show</button>
-                <button type="submit" formaction="edit">Edit</button>
-                <button type="submit" formaction="remove">Remove</button>
-            </form>
-        </div>
-
-        <form method="post"> 
+        <form method="post">
+	        <div class="recipe-button-container">
+	            <button type="submit" formaction="create">Create</button>
+	            <button type="submit" formaction="show">Show</button>
+	            <button type="submit" formaction="edit">Edit</button>
+	            <button type="submit" formaction="remove">Remove</button>
+	        </div>
+			
             <table class="recipe-table">
                 <thead>
                 <tr>

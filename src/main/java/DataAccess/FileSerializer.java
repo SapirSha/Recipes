@@ -67,6 +67,17 @@ public class FileSerializer implements ISerializer {
 //			r.setInstructions("1. cook rice\n2. roll");
 //			
 //			saveRecipe(users.get(1), r);
+//			
+//			r = new Recipe();
+//			
+//			r.setName("pasta bolognese");
+//			r.setCategory("italian");
+//			r.setDescription("A classic dish of pasta with meat and sauce");
+//			r.setIngredients("-pasta\n-red meat\n-tomato sauce\n-onion");
+//			r.setInstructions("1. cook the pasta\n2. cut the onion\n3. cook the onion with the meat"
+//					+ "\n4. add tomato sauce\n5. add pasta");
+//			
+//			saveRecipe(users.get(1), r);
 //		}
 //		catch (Exception e) {
 //			e.printStackTrace();
