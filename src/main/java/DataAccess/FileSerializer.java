@@ -56,6 +56,21 @@ public class FileSerializer implements ISerializer {
 //		} catch (IOException e) {
 //			System.out.println("IO exception");
 //		}
+		
+//		try {
+//			Recipe r = new Recipe();
+//			
+//			r.setName("sushi");
+//			r.setCategory("asian");
+//			r.setDescription("a roll of rice with vegetables and fish");
+//			r.setIngredients("-fish\n-rice\n-avocado");
+//			r.setInstructions("1. cook rice\n2. roll");
+//			
+//			saveRecipe(users.get(1), r);
+//		}
+//		catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 	private int findMaxRecipeId() {

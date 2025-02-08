@@ -251,3 +251,110 @@
             to { opacity: 1; }
         }
         
+        
+        /* styles for MyRecipes (the table page) */
+
+        .recipe-button-container {
+		    text-align: center;
+		    margin-bottom: 15px;
+		}
+		
+		.recipe-button-container button {
+		    padding: 10px 20px;
+		    margin: 0 10px;
+		    background-color: #5cb85c;
+		    color: #fff;
+		    border: none;
+		    border-radius: 5px;
+		    cursor: pointer;
+		    transition: background-color 0.3s ease;
+		}
+		
+		.recipe-button-container button:hover {
+		    background-color: #449d44;
+		}
+		
+		.recipe-table {
+		    width: 100%;
+		    border-collapse: collapse;
+		    margin-top: 20px;
+		}
+		
+		.recipe-table th,
+		.recipe-table td {
+		    padding: 12px 15px;
+		    text-align: left;
+		    border-bottom: 1px solid #ddd;
+		}
+		
+		.recipe-table th {
+		    background-color: #f2f2f2;
+		    font-weight: bold;
+		}
+		
+		.recipe-table tbody tr:nth-child(even) {
+		    background-color: #f9f9f9;
+		}
+		
+		.recipe-table tbody tr:hover {
+		    background-color: #e9e9e9;
+		}
+		
+		.recipe-table td input[type="radio"] {
+		    margin: 0;
+		    padding: 0;
+		    vertical-align: middle;  /* Align the radio button vertically */
+		}
+		
+		.recipe-table td div {
+		    text-align: center;  /* Center the radio button horizontally */
+		}
+		
+		.recipe-table td:first-child {
+		    width: 50px; /* Example width, adjust as needed */
+		}
+		
+		/* Responsive Design (Optional - Adjust as needed) */
+		@media (max-width: 768px) {
+		    .content {
+		        margin-left: 0;  /* Reset margin for full width */
+		        padding: 10px;
+		    }
+		
+		    .menu {
+		        position: static; /* Remove fixed positioning */
+		        width: 100%;      /* Take full width */
+		        height: auto;     /* Adjust height */
+		        overflow: visible;/* Allow scrolling of content */
+		        text-align: left;
+		    }
+		
+		    .menu a {
+		        display: inline-block; /* Display items horizontally */
+		        padding: 10px;       /* Adjust padding */
+		    }
+		
+		    .menu .image-button {
+		        display: inline-block;
+		        margin-right: 10px;
+		    }
+		
+		    .menu .image-button img {
+		        width: 40px;
+		        height: 40px;
+		    }
+		
+		    .recipe-button-container button {
+		        padding: 8px 16px;
+		        margin: 5px;
+		    }
+		
+		    .recipe-table {
+		        font-size: 0.9em;
+		    }
+		
+		    .recipe-table th,
+		    .recipe-table td {
+		        padding: 8px;
+		    }
+		}

@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +12,45 @@
     <%@ include file="common/header.jsp" %>
     <div class="content">
         <h1>My Recipes Page</h1>
-        <p>Those Are Your Recipes!</p>
+        
+        <br>
+        <br>
+        
+        <div class="recipe-button-container">
+            <form method="post">  <!-- Added a form tag -->
+                <button type="submit" formaction="create">Create</button>
+                <button type="submit" formaction="show">Show</button>
+                <button type="submit" formaction="edit">Edit</button>
+                <button type="submit" formaction="remove">Remove</button>
+            </form>
+        </div>
+
+        <form method="post"> 
+            <table class="recipe-table">
+                <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="recipe" items="${recipeList}" varStatus="status">
+                    <tr>
+                        <td>
+                            <div>
+                                <input type="radio" name="recipeRadio" value="${status.index}">
+                            </div>
+                        </td>
+                        <td>${recipe.name}</td>
+                        <td>${recipe.category}</td>
+                        <td>${recipe.description}</td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </form>
     </div>
     <%@ include file="common/LoginSignupModal.jsp" %>
 </body>
