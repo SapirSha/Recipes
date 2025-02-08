@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.omg.CORBA.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,16 +27,20 @@ public class RecipeController {
 	Service service;
 	
     @RequestMapping("/ShowRecipe")
-    public String showRecipeDetails(Model model) {
+    public String showRecipeDetails(@ModelAttribute("ShowRecipe") Recipe recipe, Model model) {
     	System.out.println("SHOWING RECIPE");
     	
-        Recipe recipe = new Recipe("Chocolate Cake", "Dessert", "A delicious chocolate cake.",
-                "Flour, Sugar, Cocoa, Baking Powder, Eggs, Milk, Butter, Vanilla",
-                "1. Mix ingredients. 2. Bake at 350°F for 30 minutes. 3. Enjoy!",
-                new Date(), new Date());
-        
+        recipe.setName("Chocolate Cake");
+        recipe.setCategory( "Dessert");
+        recipe.setDescription("A delicious chocolate cake.");
+        recipe.setIngredients("Flour, Sugar, Cocoa, Baking Powder, Eggs, Milk, Butter, Vanilla");
+        recipe.setInstructions("1. Mix ingredients. 2. Bake at 350°F for 30 minutes. 3. Enjoy!");
+        recipe.setDateAdded(new Date());
+        recipe.setDateLatestChange(new Date());
         
         model.addAttribute("recipe", recipe);
+        
+        System.out.println("HELLO" + recipe);
         
         return "RecipeDetails";
     }
@@ -43,11 +48,12 @@ public class RecipeController {
 	
 	@RequestMapping("/EditRecipe")
 	public String editRecipe(@RequestParam(value = "error", required = false) String error, 
-			@ModelAttribute("recipe") Recipe recipe, Model model, HttpServletRequest request) {
-		if (request.getSession(false) == null) // Check if the user has a session
+			@ModelAttribute("EditRecipe") Recipe recipe, Model model, HttpServletRequest request) {
+		
+		if (request.getSession(false) == null)
 			return "redirect:/";
 		
-		if (recipe.getId() == 0) // if recipe not passed (an empty object)
+		if (recipe.getId() == 0)
 			return "/WASD";
 		
 		if (error != null)
@@ -55,7 +61,7 @@ public class RecipeController {
 		
 		model.addAttribute("recipe", recipe);
 		
-		model.addAttribute("actionType", "e"); // "e" for edit
+		model.addAttribute("actionType", "e");
 		
 		return "recipePage";
 	}
@@ -73,11 +79,20 @@ public class RecipeController {
 	}
 
     @PostMapping("/AddRecipe")
-    public String addRecipe(@ModelAttribute("AddRecipe") Recipe recipe) {
+    public String addRecipe(@ModelAttribute("AddRecipe") Recipe recipe, HttpServletRequest request) {
         System.out.println("Adding new recipe: " + recipe);
         
         /// ADD THE RECIPE
-        
+        try {
+        	recipe.setDateAdded(new Date());
+        	recipe.setDateLatestChange(new Date());
+        service.saveRecipe((User)request.getSession().getAttribute("user"), recipe);
+        }
+        catch (Exception e) {
+        	System.out.println("EXCEPTION IN ADD RECIPE: " + e);
+            return "redirect:/MyRecipes?RecipeCreated=false";
+        }
+
         
         return "redirect:/MyRecipes?RecipeCreated=true";
     }
