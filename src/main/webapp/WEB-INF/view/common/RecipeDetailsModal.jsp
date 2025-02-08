@@ -16,7 +16,7 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <h1>Recipe Details</h1>
-            <form:form method="POST" modelAttribute="ShowRecipe" action="/Recipe/ShowRecipe">
+            <form:form method="POST" modelAttribute="ShowRecipe" action="SaveRecipe">
                 <form:hidden path="id" id="recipe-id" />
                 <div class="editable">
                     <strong>Name:</strong> <span>${recipe.name}</span>

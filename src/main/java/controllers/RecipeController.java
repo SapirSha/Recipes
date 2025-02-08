@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import Exceptions.InvalidRecipeException;
 import Exceptions.NoRecipeException;
@@ -26,24 +28,41 @@ public class RecipeController {
 	@Autowired
 	Service service;
 	
-    @RequestMapping("/ShowRecipe")
-    public String showRecipeDetails(@ModelAttribute("ShowRecipe") Recipe recipe, Model model) {
-    	System.out.println("SHOWING RECIPE");
-    	
-        recipe.setName("Chocolate Cake");
-        recipe.setCategory( "Dessert");
-        recipe.setDescription("A delicious chocolate cake.");
-        recipe.setIngredients("Flour, Sugar, Cocoa, Baking Powder, Eggs, Milk, Butter, Vanilla");
-        recipe.setInstructions("1. Mix ingredients. 2. Bake at 350°F for 30 minutes. 3. Enjoy!");
-        recipe.setDateAdded(new Date());
-        recipe.setDateLatestChange(new Date());
-        
-        model.addAttribute("recipe", recipe);
-        
-        System.out.println("HELLO" + recipe);
-        
-        return "RecipeDetails";
-    }
+	@RequestMapping(value = "/ShowRecipePage")
+	public String showRecipeDetails(@RequestParam("id") int id,
+	                                @RequestParam("name") String name,
+	                                @RequestParam("category") String category,
+	                                @RequestParam("description") String description,
+	                                @RequestParam("ingredients") String ingredients,
+	                                @RequestParam("instructions") String instructions,
+	                                RedirectAttributes redirectAttributes) {
+	    // Create and populate a Recipe object
+	    Recipe recipe = new Recipe(name, category, description, ingredients, instructions, new Date(), new Date());
+	    recipe.setId(id);
+	    // Add as a flash attribute (retained only for the next request)
+	    redirectAttributes.addFlashAttribute("ShowRecipe", recipe);
+	    
+	    // Redirect to the second method
+	    return "redirect:/ShowRecipe";
+	}
+
+
+	
+	@RequestMapping("/ShowRecipe")
+	public String showRecipeDetails(@ModelAttribute("ShowRecipe") Recipe recipe, Model model) {
+
+	    System.out.println("SHOWING RECIPE");
+	    System.out.println("-----------------------------------------------------");
+	    System.out.println(recipe);
+	    System.out.println("-----------------------------------------------------");
+
+	    model.addAttribute("recipe", recipe);
+	    
+	    System.out.println("HELLO " + recipe);
+	    
+	    return "RecipeDetails";
+	}
+
     
 	
 	@RequestMapping("/EditRecipe")
@@ -90,26 +109,29 @@ public class RecipeController {
         }
         catch (Exception e) {
         	System.out.println("EXCEPTION IN ADD RECIPE: " + e);
-            return "redirect:/MyRecipes?RecipeCreated=false";
+            return "redirect:/MyRecipes?RecipeCreated=false"; //////////////////////////////////
         }
 
         
         return "redirect:/MyRecipes?RecipeCreated=true";
     }
 	
-	@PostMapping("/saveRecipe")
+	@PostMapping("/SaveRecipe")
 	public String editRecipeProcess(@ModelAttribute("recipe") Recipe recipe, HttpServletRequest request) {
+		System.out.println("SAVE RECIPE: " + recipe);
+		
 		try {
-			User user = (User)request.getAttribute("user");
-			
-			service.editRecipe(user, recipe);
+			User user = (User)request.getSession().getAttribute("user");
+
+			System.out.println("USER-------------" + service.getUserByName(user.getUsername()));
+			/*service.editRecipe(service.getUserByName(user.getUsername()), recipe);
 		}
 		catch (NoRecipeException e) {
 		} catch (InvalidRecipeException e) {
 			return "redirect:/recipe/edit?error=Invlid recipe";
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (NoUserException e) {
+		*/} catch (NoUserException e) {
 			e.printStackTrace();
 		}
 		

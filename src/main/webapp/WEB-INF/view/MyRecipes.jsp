@@ -9,43 +9,50 @@
     <script type="text/javascript" src="resources/js/main.js"></script>
     <script>
     
- // Ensure the DOM is loaded before attaching listeners
     document.addEventListener("DOMContentLoaded", function() {
-        // Attach event listener to all "Show" buttons
         const showButtons = document.querySelectorAll(".show-recipe-btn");
+        const contextPath = "${pageContext.request.contextPath}"; // Ensure this is properly retrieved
+
         showButtons.forEach(button => {
             button.addEventListener("click", function() {
-                // Create a recipe data object from data attributes
+                // Extract values from the button's data attributes
                 const recipeData = {
-                    id: this.dataset.id,
-                    name: this.dataset.name,
-                    category: this.dataset.category,
-                    description: this.dataset.description,
-                    ingredients: this.dataset.ingredients,
-                    instructions: this.dataset.instructions
+                    id: this.dataset.id || "",
+                    name: this.dataset.name || "",
+                    category: this.dataset.category || "",
+                    description: this.dataset.description || "",
+                    ingredients: this.dataset.ingredients || "",
+                    instructions: this.dataset.instructions || ""
                 };
-                // Populate modal fields with the recipe data
-                document.getElementById("recipe-id").value = recipeData.id;
-                document.getElementById("recipe-name").value = recipeData.name;
-                document.getElementById("recipe-category").value = recipeData.category;
-                document.getElementById("recipe-description").value = recipeData.description;
-                document.getElementById("recipe-ingredients").value = recipeData.ingredients;
-                document.getElementById("recipe-instructions").value = recipeData.instructions;
-                
-                // Open the modal (assuming your openModal function is defined accordingly)
-                openModal("addRecipeModal");
+
+                // Check if all attributes are being retrieved correctly
+                console.log("Recipe Data: ", recipeData);
+
+                // Encode parameters safely
+                const params = new URLSearchParams(recipeData).toString();
+
+                // Check the constructed query string
+                console.log("Query String: " + params);
+
+                // Construct the full URL
+                const url = contextPath + "/ShowRecipePage?" + params;
+
+                console.log("Navigating to: " + url); // Debugging log
+
+                // Redirect to the generated URL
+                window.location.href = url;
             });
         });
     });
 
- 
     </script>
 </head>
 <body>
     <%@ include file="common/header.jsp" %>
     <%@ include file="common/LoginSignupModal.jsp" %>
     
-    <%@ include file="common/AddRecipeModal.jsp" %>
+        <%@ include file="common/AddRecipeModal.jsp" %>
+
 
     <div class="content">
         <h1>My Recipes Page</h1>
@@ -81,6 +88,7 @@
                         <td>${recipe.description}</td>
                         <td>
 						    <button type="button"
+						            onclick = "console.log('Button Values')"
 						            class="show-recipe-btn"
 						            data-id="${recipe.id}"
 						            data-name="${recipe.name}"
