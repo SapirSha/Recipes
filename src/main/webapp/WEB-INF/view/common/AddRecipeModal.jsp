@@ -10,30 +10,31 @@
     <script type="text/javascript" src="resources/js/AddRecipeModal.js"></script>
 </head>
 <body>
+<div class="add-recipe-modal" style="display: contents">
     <div id="addRecipeModal" class="recipe-container">
         <div class="modal-content">
             <span class="close" onclick="closeModal('addRecipeModal')">&times;</span>
             <h1>Add New Recipe</h1>
-            <form:form method="POST" modelAttribute="recipe" action="${contextPath}/addRecipe">
+            <form:form method="POST" modelAttribute="recipe" action="/Recipes/AddRecipe">
                 <div class="editable">
                     <strong>Name:</strong>
-                    <form:input path="name" id="new-recipe-name" class="input-field" />
+                    <input id="new-recipe-name" class="input-field" />
                 </div>
                 <div class="editable">
                     <strong>Category:</strong>
-                    <form:input path="category" id="new-recipe-category" class="input-field" />
+                    <input id="new-recipe-category" class="input-field" />
                 </div>
                 <div class="editable">
                     <strong>Description:</strong>
-                    <form:textarea path="description" id="new-recipe-description" class="input-field" oninput="autoExpandTextarea(event)"></form:textarea>
+                    <textarea id="new-recipe-description" class="input-field" oninput="autoExpandTextarea(event)"></textarea>
                 </div>
                 <div class="editable">
                     <strong>Ingredients:</strong>
-                    <form:textarea path="ingredients" id="new-recipe-ingredients" class="input-field" oninput="autoExpandTextarea(event)"></form:textarea>
+                    <textarea id="new-recipe-ingredients" class="input-field" oninput="autoExpandTextarea(event)"></textarea>
                 </div>
                 <div class="editable">
                     <strong>Instructions:</strong>
-                    <form:textarea path="instructions" id="new-recipe-instructions" class="input-field" oninput="autoExpandTextarea(event)"></form:textarea>
+                    <textarea id="new-recipe-instructions" class="input-field" oninput="autoExpandTextarea(event)"></textarea>
                 </div>
                 <div class="edit-button">
                     <button type="submit" class="save-btn">Add Recipe</button>
@@ -41,5 +42,6 @@
             </form:form>
         </div>
     </div>
+</div>
 </body>
 </html>

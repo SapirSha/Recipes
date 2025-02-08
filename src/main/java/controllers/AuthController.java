@@ -48,7 +48,7 @@ public class AuthController {
             if (savedUser.getPassword().equals(user.getPassword())) {
                 // create session and put user object on session
                 request.getSession().setAttribute("user", savedUser);
-                return "redirect:" + (returnUrl != null ? returnUrl : "/");
+                return "redirect:/";
             }
         } catch (NoUserException e) {
             System.out.println(e.getMessage());

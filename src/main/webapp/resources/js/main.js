@@ -76,14 +76,16 @@
             var btnAuthorize = document.getElementById("btnAuthorize");
 
             // OPEN MODAL
-            btnAuthorize.onclick = function(event) {
-                event.preventDefault();
-                modal.style.display = "block";
-                modal.classList.add("show");
-                modal.classList.remove("hide");
-                modalContent.classList.remove("hide");
-                openTab('login');
-            };
+            if (btnAuthorize != null){
+	            btnAuthorize.onclick = function(event) {
+	                event.preventDefault();
+	                modal.style.display = "block";
+	                modal.classList.add("show");
+	                modal.classList.remove("hide");
+	                modalContent.classList.remove("hide");
+	                openTab('login');
+	            };
+            }
             
             // Close MODAL
             function closeModal() {

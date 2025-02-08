@@ -10,6 +10,12 @@
 </head>
 <body>
     <%@ include file="common/header.jsp" %>
+    <%@ include file="common/LoginSignupModal.jsp" %>
+    
+    <%@ include file="common/AddRecipeModal.jsp" %>
+    
+
+
     <div class="content">
         <h1>My Recipes Page</h1>
         
@@ -18,7 +24,7 @@
         
         <form method="post">
 	        <div class="recipe-button-container">
-	            <button type="submit" formaction="create">Create</button>
+	            <button type="button" onclick="openModal('addRecipeModal')">Create</button>
 	            <button type="submit" formaction="show">Show</button>
 	            <button type="submit" formaction="edit">Edit</button>
 	            <button type="submit" formaction="remove">Remove</button>
@@ -50,6 +56,5 @@
             </table>
         </form>
     </div>
-    <%@ include file="common/LoginSignupModal.jsp" %>
 </body>
 </html>
