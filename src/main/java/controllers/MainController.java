@@ -19,10 +19,10 @@ public class MainController {
 		return "MainPage";
 	}
 
-    @RequestMapping("/help")
-	public String signUp(@ModelAttribute("user") User user, HttpServletRequest request) {
+    @RequestMapping("/MyRecipes")
+	public String showMyRecipesPage() {
 		System.out.println("HEREAWSD");
-		return "WASD";
+		return "MyRecipes";
 	}
 
 }
