@@ -76,7 +76,7 @@ public class RecipeController {
     public String addRecipe(@ModelAttribute("AddRecipe") Recipe recipe) {
         System.out.println("Adding new recipe: " + recipe);
         
-        
+        /// ADD THE RECIPE
         
         
         return "redirect:/MyRecipes?RecipeCreated=true";
