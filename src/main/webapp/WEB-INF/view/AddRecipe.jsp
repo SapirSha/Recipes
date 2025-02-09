@@ -4,11 +4,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+
+</script>
 </head>
 <body>
     <button onclick="openModal('addRecipeModal')">Add New Recipe</button>
     <jsp:include page="common/AddRecipeModal.jsp" />
-
 </body>
 </html>
 
