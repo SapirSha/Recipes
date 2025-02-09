@@ -7,6 +7,7 @@
     <title>Recipes</title>
     <link rel="stylesheet" type="text/css" href="resources/css/main.css">
     <script type="text/javascript" src="resources/js/main.js"></script>
+    
     <script>
     
     document.addEventListener("DOMContentLoaded", function() {
@@ -15,7 +16,6 @@
 
         showButtons.forEach(button => {
             button.addEventListener("click", function() {
-                // Extract values from the button's data attributes
                 const recipeData = {
                     id: this.dataset.id || "",
                     name: this.dataset.name || "",
@@ -25,27 +25,54 @@
                     instructions: this.dataset.instructions || ""
                 };
 
-                // Check if all attributes are being retrieved correctly
                 console.log("Recipe Data: ", recipeData);
 
-                // Encode parameters safely
                 const params = new URLSearchParams(recipeData).toString();
 
-                // Check the constructed query string
                 console.log("Query String: " + params);
 
-                // Construct the full URL
                 const url = contextPath + "/ShowRecipePage?" + params;
 
                 console.log("Navigating to: " + url); // Debugging log
 
-                // Redirect to the generated URL
                 window.location.href = url;
             });
         });
     });
 
     </script>
+    <style>
+
+.show-recipe-btn {
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+}
+
+
+.show-recipe-btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+
+.show-recipe-btn:active {
+  transform: translateY(0);
+}
+
+
+table .show-recipe-btn {
+  margin: 5px 0;
+}
+    
+    </style>
 </head>
 <body>
     <%@ include file="common/header.jsp" %>
@@ -87,17 +114,17 @@
                         <td>${recipe.category}</td>
                         <td>${recipe.description}</td>
                         <td>
-						    <button type="button"
-						            onclick = "console.log('Button Values')"
-						            class="show-recipe-btn"
-						            data-id="${recipe.id}"
-						            data-name="${recipe.name}"
-						            data-category="${recipe.category}"
-						            data-description="${recipe.description}"
-						            data-ingredients="${recipe.ingredients}"
-						            data-instructions="${recipe.instructions}">
-						        Show
-						    </button>
+						<button type="button"
+						        class="show-recipe-btn show-button"
+						        data-id="${recipe.id}"
+						        data-name="${recipe.name}"
+						        data-category="${recipe.category}"
+						        data-description="${recipe.description}"
+						        data-ingredients="${recipe.ingredients}"
+						        data-instructions="${recipe.instructions}">
+						    Show
+						</button>
+
 						</td>
 
                     </tr>

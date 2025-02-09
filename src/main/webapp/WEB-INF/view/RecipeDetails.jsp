@@ -9,7 +9,6 @@
     <style>
     @charset "ISO-8859-1";
 
-/* Global styling for the recipe editor */
 .recipe-editor {
   font-family: 'Arial', sans-serif;
   background-color: #f2f2f2;
@@ -21,7 +20,6 @@
   min-height: 100vh;
 }
 
-/* Container for the recipe form */
 .recipe-container {
   background-color: #fff;
   padding: 20px;
@@ -32,13 +30,11 @@
   animation: fadeIn 0.5s;
 }
 
-/* Headings */
 h1 {
   text-align: center;
   color: #333;
 }
 
-/* Editable fields styling */
 .editable {
   margin: 20px 0;
 }
@@ -48,7 +44,6 @@ h1 {
   color: #555;
 }
 
-/* Input and textarea styling */
 .input-field {
   width: 100%;
   padding: 10px;
@@ -67,14 +62,12 @@ textarea {
   overflow: hidden;
 }
 
-/* Buttons container */
 .edit-button {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
 }
 
-/* General button styling */
 button {
   padding: 12px 20px;
   border: none;
@@ -87,7 +80,6 @@ button:hover {
   opacity: 0.9;
 }
 
-/* Specific button styles */
 .edit-btn {
   background-color: #007BFF;
   color: white;
@@ -105,7 +97,6 @@ button:hover {
   color: white;
 }
 
-/* Fade-in animation */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -117,12 +108,6 @@ button:hover {
         autoExpandAllTextareas();
     });
 
-    /**
-     * Switches the page to edit mode:
-     * - Hides the display-only spans.
-     * - Shows the corresponding input/textarea fields.
-     * - Toggles button visibility (hides Edit; shows Save and Cancel).
-     */
     function enterEditMode() {
         document.querySelectorAll(".display-value").forEach(span => span.style.display = "none");
         document.querySelectorAll(".input-field").forEach(input => {
@@ -136,13 +121,6 @@ button:hover {
         document.getElementById("cancelButton").style.display = "inline-block";
     }
 
-    /**
-     * Cancels editing:
-     * - Resets the form to its original values.
-     * - Hides input/textarea fields.
-     * - Displays the read-only spans.
-     * - Restores the button layout to show Edit only.
-     */
     function cancelEditMode() {
         document.getElementById("recipeForm").reset();
         document.querySelectorAll(".input-field").forEach(input => input.style.display = "none");
@@ -152,18 +130,12 @@ button:hover {
         document.getElementById("cancelButton").style.display = "none";
     }
 
-    /**
-     * Automatically expands a textarea as the user types.
-     */
     function autoExpandTextarea(event) {
         let element = event.target;
         element.style.height = "auto";
         element.style.height = element.scrollHeight + "px";
     }
 
-    /**
-     * On page load, adjust all textareas to match their content height.
-     */
     function autoExpandAllTextareas() {
         document.querySelectorAll("textarea").forEach(textarea => {
             textarea.style.height = "auto";
@@ -171,9 +143,6 @@ button:hover {
         });
     }
 
-    /**
-     * Returns the user to the previous page.
-     */
     function goBack() {
         window.history.back();
     }
