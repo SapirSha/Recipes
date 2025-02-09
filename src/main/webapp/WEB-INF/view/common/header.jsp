@@ -2,7 +2,7 @@
 
 <div class="menu">
 	<c:choose>
-        <c:when test="${not empty isNotAuthorized and isNotAuthorized}">
+        <c:when test="${empty sessionScope.user}">
             <a href="#" id="btnAuthorize">Authorize</a>
         </c:when>
         <c:otherwise>
