@@ -50,8 +50,14 @@ public class RecipeController {
 
 	
 	@RequestMapping("/ShowRecipe")
-	public String showRecipeDetails(@ModelAttribute("ShowRecipe") Recipe recipe, Model model) {
+	public String showRecipeDetails(@ModelAttribute("ShowRecipe") Recipe recipe,
+	        @RequestParam(value = "SaveError", required = false) String saveError,
+	        Model model) {
 
+		if (saveError != null && "true".equals(saveError)) {
+			System.out.println("SAVE ERROR");
+		}
+		
 	    if (recipe.getId() == 0)
 	    	return "redirect:/MyRecipes";
 
@@ -89,7 +95,7 @@ public class RecipeController {
 		
 		model.addAttribute("recipe", new Recipe());
 		
-		model.addAttribute("actionType", "c"); // "c" for create
+		model.addAttribute("actionType", "c");
 		
 		return "AddRecipe";
 	}
@@ -114,27 +120,37 @@ public class RecipeController {
     }
 	
 	@PostMapping("/SaveRecipe")
-	public String editRecipeProcess(@ModelAttribute("recipe") Recipe recipe, HttpServletRequest request, Model model) {
+	public String editRecipeProcess(@ModelAttribute("recipe") Recipe recipe,
+			HttpServletRequest request, Model model,
+			RedirectAttributes redirectAttributes) {
+		
 		if (request.getSession(false) == null || request.getSession().getAttribute("user") == null) // Check if the user has a session
 			return "redirect:/";
 		
 		System.out.println("SAVE RECIPE: " + recipe);
 		
+		String error = "";
+		
 		try {
 			User user = (User)request.getSession().getAttribute("user");
 
-//			System.out.println("USER-------------" + service.getUserByName(user.getUsername()));
 			service.editRecipe(user, recipe);
 		}
 		catch (NoRecipeException e) {
+			return "redirect:/MyRecipes";
 		} catch (InvalidRecipeException e) {
-			e.printStackTrace();
+			error += "Invalid Recipe\n";
 		} catch (IOException e) {
-			e.printStackTrace();
+			return "redirect:/MyRecipes";
 		} catch (NoUserException e) {
-			e.printStackTrace();
+			return "redirect:/";
 		}
     			
+		if (!error.equals("")) {
+			redirectAttributes.addFlashAttribute("ShowRecipe", recipe);
+			return "redirect:/ShowRecipe?SaveError=true";
+		}
+		
 		List<Recipe> recipeList = ((User)request.getSession().getAttribute("user")).getRecipes();
 		
 		for (Recipe r : recipeList) {
@@ -146,10 +162,7 @@ public class RecipeController {
 		return "MyRecipes";
 	}
 	
-	
-	
-	
-	
+
 	
 	@PostMapping("/CreateRecipe")
 	public String createRecipeProcess(@ModelAttribute("recipe") Recipe recipe, HttpServletRequest request) {

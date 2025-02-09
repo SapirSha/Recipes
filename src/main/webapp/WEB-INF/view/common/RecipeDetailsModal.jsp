@@ -42,6 +42,11 @@
                     <button type="button" id="editButton" class="edit-btn" onclick="toggleEditMode()">Edit</button>
                     <button type="submit" id="saveButton" class="save-btn">Save</button>
                 </div>
+                
+				<div id="error-message input-field" style="display: none;" class="error-message">
+				    Recipe name is already registered!
+				</div>
+
             </form:form>
         </div>
     </div>

@@ -97,6 +97,28 @@ button:hover {
   color: white;
 }
 
+.error-message {
+    display: none;  
+    background-color: #ff4d4d; 
+    color: white;  
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    width: fit-content;
+    margin: 10px auto;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -146,6 +168,7 @@ button:hover {
     function goBack() {
         window.history.back();
     }
+    
 
     </script>
 </head>
@@ -185,6 +208,9 @@ button:hover {
                     <span class="display-value" id="display-instructions">${recipe.instructions}</span>
                     <form:textarea path="instructions" id="recipe-instructions" class="input-field" style="display:none;" oninput="autoExpandTextarea(event)"></form:textarea>
                 </div>
+                <div id="error-message" style="display: none;" class="error-message">
+				    Recipe name is already registered!
+				</div>
                 
                 <div class="edit-button">
                     <button type="button" id="editButton" class="edit-btn" onclick="enterEditMode()">Edit</button>
@@ -193,6 +219,23 @@ button:hover {
                     <button type="button" id="returnButton" class="return-btn" onclick="goBack()">Return</button>
                 </div>
             </form:form>
+			
+			<script>
+		     function getUrlParameter(name) {
+		         const urlParams = new URLSearchParams(window.location.search);
+		         return urlParams.get(name);
+		     }
+
+		     const saveError = getUrlParameter('SaveError');
+		     if (saveError === 'true') {
+		          const errorMessageDiv = document.getElementById('error-message');
+		          console.log(saveError);
+		         if (errorMessageDiv) {
+		             errorMessageDiv.style.display = 'block';
+		         }
+		     }
+		     </script>
+            
         </div>
     </div>
 </body>

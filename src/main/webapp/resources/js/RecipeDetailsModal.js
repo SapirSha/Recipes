@@ -1,13 +1,18 @@
         window.addEventListener('load', function() {
+        	
+            
             const elements = document.querySelectorAll('.editable');
             elements.forEach(element => {
                 const input = element.querySelector('input, textarea');
                 const span = element.querySelector('span');
                 
-                input.style.opacity = '0';
-                input.style.display = 'none';
-                span.style.display = 'inline-block';
-                span.style.opacity = '1';
+
+                    input.style.opacity = '0';
+                    input.style.display = 'none';
+                    span.style.display = 'inline-block';
+                    span.style.opacity = '1';
+                
+
             });
         });
         
