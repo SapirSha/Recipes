@@ -1,8 +1,10 @@
-package controllers;
+ package controllers;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,6 +30,13 @@ import Others.User;
 public class RecipeController {
 	@Autowired
 	Service service;
+	
+	private Map<String, String> imageURLs = new HashMap<String, String>() {{
+	    put("Italian", "https://rp-cms.imgix.net/wp-content/uploads/AdobeStock_513646998-scaled.jpeg");
+	    put("Mexican", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGG4fItW-8_gmL6SFaWmN-lejRx6OCDyBDVQ&s");
+	    put("Indian", "https://images.squarespace-cdn.com/content/v1/612d4825ee7c3b7ba3e215b7/1667458982443-N6XGU1PU7335QEMVUP7M/Delicious+food.png");
+	}};
+
 	
 	@RequestMapping(value = "/ShowRecipePage")
 	public String showRecipeDetails(@RequestParam("id") int id,
@@ -60,7 +69,12 @@ public class RecipeController {
 		
 	    if (recipe.getId() == 0)
 	    	return "redirect:/MyRecipes";
-
+	    
+	    String recipeImageUrl = imageURLs.getOrDefault(
+	    		recipe.getCategory(), 
+	    		"https://cdn.georgeinstitute.org/sites/default/files/2020-10/world-food-day-2020.png");
+	    model.addAttribute("recipeImageUrl", recipeImageUrl);
+	    
 	    model.addAttribute("recipe", recipe);
 	    	    
 	    return "RecipeDetails";

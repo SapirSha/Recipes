@@ -218,6 +218,14 @@ button:hover {
                     <button type="button" id="cancelButton" class="cancel-btn" style="display:none;" onclick="cancelEditMode()">Cancel</button>
                     <button type="button" id="returnButton" class="return-btn" onclick="goBack()">Return</button>
                 </div>
+                
+                 <div class="editable">
+               <strong>Image:</strong>
+               <div class="recipe-image">
+                   <!-- Display the image passed from the controller -->
+                   <img src="${recipeImageUrl}" alt="Recipe Image" style="max-width: 100%; height: auto;"/>
+               </div>
+           		</div>
             </form:form>
 			
 			<script>
