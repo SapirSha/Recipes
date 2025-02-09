@@ -156,42 +156,36 @@ button:hover {
             <form:form id="recipeForm" method="POST" modelAttribute="ShowRecipe" action="SaveRecipe">
                 <form:hidden path="id" id="recipe-id" />
                 
-                <!-- Name Field -->
                 <div class="editable">
                     <strong>Name:</strong>
                     <span class="display-value" id="display-name">${recipe.name}</span>
                     <form:input path="name" id="recipe-name" class="input-field" style="display:none;" />
                 </div>
                 
-                <!-- Category Field -->
                 <div class="editable">
                     <strong>Category:</strong>
                     <span class="display-value" id="display-category">${recipe.category}</span>
                     <form:input path="category" id="recipe-category" class="input-field" style="display:none;" />
                 </div>
                 
-                <!-- Description Field -->
                 <div class="editable">
                     <strong>Description:</strong>
                     <span class="display-value" id="display-description">${recipe.description}</span>
                     <form:textarea path="description" id="recipe-description" class="input-field" style="display:none;" oninput="autoExpandTextarea(event)"></form:textarea>
                 </div>
                 
-                <!-- Ingredients Field -->
                 <div class="editable">
                     <strong>Ingredients:</strong>
                     <span class="display-value" id="display-ingredients">${recipe.ingredients}</span>
                     <form:textarea path="ingredients" id="recipe-ingredients" class="input-field" style="display:none;" oninput="autoExpandTextarea(event)"></form:textarea>
                 </div>
                 
-                <!-- Instructions Field -->
                 <div class="editable">
                     <strong>Instructions:</strong>
                     <span class="display-value" id="display-instructions">${recipe.instructions}</span>
                     <form:textarea path="instructions" id="recipe-instructions" class="input-field" style="display:none;" oninput="autoExpandTextarea(event)"></form:textarea>
                 </div>
                 
-                <!-- Buttons -->
                 <div class="edit-button">
                     <button type="button" id="editButton" class="edit-btn" onclick="enterEditMode()">Edit</button>
                     <button type="submit" id="saveButton" class="save-btn" style="display:none;">Save</button>

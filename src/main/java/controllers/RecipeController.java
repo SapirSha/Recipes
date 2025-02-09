@@ -52,15 +52,11 @@ public class RecipeController {
 	@RequestMapping("/ShowRecipe")
 	public String showRecipeDetails(@ModelAttribute("ShowRecipe") Recipe recipe, Model model) {
 
-	    System.out.println("SHOWING RECIPE");
-	    System.out.println("-----------------------------------------------------");
-	    System.out.println(recipe);
-	    System.out.println("-----------------------------------------------------");
+	    if (recipe.getId() == 0)
+	    	return "redirect:/MyRecipes";
 
 	    model.addAttribute("recipe", recipe);
-	    
-	    System.out.println("HELLO " + recipe);
-	    
+	    	    
 	    return "RecipeDetails";
 	}
 
