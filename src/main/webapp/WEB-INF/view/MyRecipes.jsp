@@ -8,39 +8,7 @@
     <link rel="stylesheet" type="text/css" href="resources/css/main.css">
     <script type="text/javascript" src="resources/js/main.js"></script>
     
-    <script>
-    
-    document.addEventListener("DOMContentLoaded", function() {
-        const showButtons = document.querySelectorAll(".show-recipe-btn");
-        const contextPath = "${pageContext.request.contextPath}"; // Ensure this is properly retrieved
 
-        showButtons.forEach(button => {
-            button.addEventListener("click", function() {
-                const recipeData = {
-                    id: this.dataset.id || "",
-                    name: this.dataset.name || "",
-                    category: this.dataset.category || "",
-                    description: this.dataset.description || "",
-                    ingredients: this.dataset.ingredients || "",
-                    instructions: this.dataset.instructions || ""
-                };
-
-                console.log("Recipe Data: ", recipeData);
-
-                const params = new URLSearchParams(recipeData).toString();
-
-                console.log("Query String: " + params);
-
-                const url = contextPath + "/ShowRecipePage?" + params;
-
-                console.log("Navigating to: " + url); // Debugging log
-
-                window.location.href = url;
-            });
-        });
-    });
-
-    </script>
     <style>
 
 .show-recipe-btn {
@@ -133,5 +101,59 @@ table .show-recipe-btn {
             </table>
         </form>
     </div>
+    
+        <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const showButtons = document.querySelectorAll(".show-recipe-btn");
+        const contextPath = "${pageContext.request.contextPath}"; // Ensure this is properly retrieved
+
+        showButtons.forEach(button => {
+            button.addEventListener("click", function() {
+                const recipeData = {
+                    id: this.dataset.id || "",
+                    name: this.dataset.name || "",
+                    category: this.dataset.category || "",
+                    description: this.dataset.description || "",
+                    ingredients: this.dataset.ingredients || "",
+                    instructions: this.dataset.instructions || ""
+                };
+
+                console.log("Recipe Data: ", recipeData);
+
+                const params = new URLSearchParams(recipeData).toString();
+
+                console.log("Query String: " + params);
+
+                const url = contextPath + "/ShowRecipePage?" + params;
+
+                console.log("Navigating to: " + url); // Debugging log
+
+                window.location.href = url;
+            });
+        });
+    });
+    
+    function getUrlParameter(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+    
+    const createError = getUrlParameter('RecipeCreated');
+
+    const modal = document.querySelector('.recipe-container');
+    const modalContent = document.querySelector('.modal-content');
+    console.log(createError)
+    if (createError == "false"){
+	    modal.style.display = 'flex';
+	    
+	    setTimeout(() => {
+	        modal.style.opacity = '1';
+	        modal.style.pointerEvents = 'auto';
+	        modalContent.style.opacity = '1';
+	        modalContent.style.transform = 'translateY(0)';
+	    }, 10);
+    }
+    </script>
+    
 </body>
 </html>

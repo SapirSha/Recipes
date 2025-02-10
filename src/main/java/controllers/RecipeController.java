@@ -32,9 +32,9 @@ public class RecipeController {
 	Service service;
 	
 	private Map<String, String> imageURLs = new HashMap<String, String>() {{
-	    put("Italian", "https://rp-cms.imgix.net/wp-content/uploads/AdobeStock_513646998-scaled.jpeg");
-	    put("Mexican", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGG4fItW-8_gmL6SFaWmN-lejRx6OCDyBDVQ&s");
-	    put("Indian", "https://images.squarespace-cdn.com/content/v1/612d4825ee7c3b7ba3e215b7/1667458982443-N6XGU1PU7335QEMVUP7M/Delicious+food.png");
+	    put("italian", "https://rp-cms.imgix.net/wp-content/uploads/AdobeStock_513646998-scaled.jpeg");
+	    put("mexican", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGG4fItW-8_gmL6SFaWmN-lejRx6OCDyBDVQ&s");
+	    put("indian", "https://images.squarespace-cdn.com/content/v1/612d4825ee7c3b7ba3e215b7/1667458982443-N6XGU1PU7335QEMVUP7M/Delicious+food.png");
 	}};
 
 	
@@ -71,8 +71,9 @@ public class RecipeController {
 	    	return "redirect:/MyRecipes";
 	    
 	    String recipeImageUrl = imageURLs.getOrDefault(
-	    		recipe.getCategory(), 
+	    		recipe.getCategory().toLowerCase(), 
 	    		"https://cdn.georgeinstitute.org/sites/default/files/2020-10/world-food-day-2020.png");
+	    
 	    model.addAttribute("recipeImageUrl", recipeImageUrl);
 	    
 	    model.addAttribute("recipe", recipe);
@@ -175,8 +176,6 @@ public class RecipeController {
 		
 		return "MyRecipes";
 	}
-	
-
 	
 	@PostMapping("/CreateRecipe")
 	public String createRecipeProcess(@ModelAttribute("recipe") Recipe recipe, HttpServletRequest request) {
