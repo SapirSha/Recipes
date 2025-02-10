@@ -9,10 +9,10 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class SpringErrorController {
 
-	/*
+	
     @RequestMapping(value = "errors")
     public ModelAndView renderErrorPage(HttpServletRequest httpRequest) {
-        /*
+        
         ModelAndView errorPage = new ModelAndView("springErrorPage");
         String errorMsg = "";
         int httpErrorCode = getErrorCode(httpRequest);
@@ -43,5 +43,5 @@ public class SpringErrorController {
         return (Integer) httpRequest
           .getAttribute("javax.servlet.error.status_code");
     }
-    */
+    
 }

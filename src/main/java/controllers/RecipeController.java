@@ -36,7 +36,6 @@ public class RecipeController {
 	    put("mexican", "https://static1.squarespace.com/static/574bf01c2b8ddef6b349d7bf/t/6583f92642ec4f63cf744a6a/1703147849500/Chinita+-+Cover_Range+Shot.jpg?format=1500w");
 	    put("indian", "https://images.squarespace-cdn.com/content/v1/612d4825ee7c3b7ba3e215b7/1667458982443-N6XGU1PU7335QEMVUP7M/Delicious+food.png");
 	}};
-
 	
 	@RequestMapping(value = "/ShowRecipePage")
 	public String showRecipeDetails(@RequestParam("id") int id,
