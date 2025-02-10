@@ -29,12 +29,15 @@ import Others.User;
 @Controller
 public class RecipeController {
 	@Autowired
-	Service service;
+	private Service service;
 	
 	private Map<String, String> imageURLs = new HashMap<String, String>() {{
 	    put("italian", "https://rp-cms.imgix.net/wp-content/uploads/AdobeStock_513646998-scaled.jpeg");
 	    put("mexican", "https://static1.squarespace.com/static/574bf01c2b8ddef6b349d7bf/t/6583f92642ec4f63cf744a6a/1703147849500/Chinita+-+Cover_Range+Shot.jpg?format=1500w");
 	    put("indian", "https://images.squarespace-cdn.com/content/v1/612d4825ee7c3b7ba3e215b7/1667458982443-N6XGU1PU7335QEMVUP7M/Delicious+food.png");
+	    put("american", "https://d2vsf1hynzxim7.cloudfront.net/production/media/23178/responsive-images/american-cuisine___default_2480_1860.jpg");
+	    put("japanese", "https://blog.sakura.co/wp-content/uploads/2021/12/shutterstock_516866173-1.jpg");
+	    put("chinese", "https://cdn.prod.website-files.com/652931cdcd18e3e8b8039e58/65e844d24fa57cdef35b95c8_Lineup.jpg");
 	}};
 	
 	@RequestMapping(value = "/ShowRecipePage")

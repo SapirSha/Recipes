@@ -84,6 +84,7 @@ public class MainController {
 			e.printStackTrace();
 		} catch (NoRecipeException e) {
 			e.printStackTrace();
+			System.out.println("Did not find recipe!");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
