@@ -25,7 +25,7 @@
         </div>
         
         <div id="loginContent" class="tab-content active">
-            <h2>Login</h2>
+            <h2 style="margin-bottom: 10px;">Login</h2>
             <form:form action="${contextPath}/processLogin" method="POST" modelAttribute="LogInUser">
 			    <label for="loginUsername">Username:</label>
 			    <input type="text" id="loginUsername" name="username" required>
@@ -40,7 +40,7 @@
         
         <div id="signUpContent" class="tab-content">
             <div id="signUpForm">
-                <h2>Sign-Up</h2>
+                <h2 style="margin-bottom: 10px;">Sign-Up</h2>
 			<form:form action="processSignup" method="post" modelAttribute="SignUpUser">
 			    <label for="signUpUsername">Username:</label>
 			    <input type="text" id="signUpUsername" name="username" required>

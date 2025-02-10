@@ -23,7 +23,7 @@ import Exceptions.NoUserException;
 public class FileSerializer implements ISerializer {
 	
 	private List<User> users;
-	private int lastRecipeId;
+	private static int lastRecipeId;
 	
 	@PostConstruct
 	public void getRecipes() {
@@ -193,8 +193,13 @@ public class FileSerializer implements ISerializer {
 
 	@Override
 	public Recipe getRecipeById(int id) throws NoRecipeException {
+		System.out.println(id);
+		
+		System.out.println(users);
+		
 		for (User user : users) {
 			for (Recipe recipe : user.getRecipes()) {
+				System.out.println(recipe);
 				if (recipe.getId() == id) {
 					return recipe;
 				}

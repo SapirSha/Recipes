@@ -166,7 +166,8 @@ button:hover {
     }
 
     function goBack() {
-        window.history.back();
+    	const contextPath = "${pageContext.request.contextPath}";
+    	window.location.href = contextPath + "/MyRecipes";
     }
     
 

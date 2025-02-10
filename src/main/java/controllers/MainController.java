@@ -66,20 +66,17 @@ public class MainController {
     
     
     
-    @PostMapping("/remove")
-    public String removeRecipe(@RequestParam(value = "recipeRadio", required = false) String selectedIndex, 
+    @RequestMapping("/remove")
+    public String removeRecipe(@RequestParam("id") String id, String selectedIndex, 
     		HttpServletRequest request) {
     	if (request.getSession(false) == null || request.getSession().getAttribute("user") == null) // Check if the user has a session
 			return "redirect:/";
     	
     	try {
-	    	if (selectedIndex != null) {
-	    		int recipeIndex = Integer.parseInt(selectedIndex);
-	    		User u = (User)request.getSession().getAttribute("user");
-	    		Recipe r = u.getRecipes().get(recipeIndex);
-	    		
-	    		service.deleteRecipe(u, r);
-	    	}
+    		User u = (User)request.getSession().getAttribute("user");
+    		int idINT = Integer.parseInt(id);
+    		Recipe r = service.getRecipe(idINT);
+    		service.deleteRecipe(u, r);
     	}
     	catch (NoUserException e) {
     		e.printStackTrace();
@@ -91,6 +88,7 @@ public class MainController {
 			e.printStackTrace();
 		}
     	
+    	System.out.println("HERE");
     	return "redirect:/MyRecipes";
     }
     

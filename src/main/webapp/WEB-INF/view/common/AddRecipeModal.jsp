@@ -43,7 +43,7 @@
                  
             <c:if test="${param.RecipeCreated eq 'false'}">
                 <div class="error-message">
-                    A recipe already has the same name.
+                    Invalid Recipe!
                 </div>
             </c:if>
             </form:form>
