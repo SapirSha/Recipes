@@ -221,7 +221,7 @@ button:hover {
                 </div>
                 
                  <div class="editable">
-               <strong>Image:</strong>
+                <br>
                <div class="recipe-image">
                    <!-- Display the image passed from the controller -->
                    <img src="${recipeImageUrl}" alt="Recipe Image" style="max-width: 100%; height: auto;"/>

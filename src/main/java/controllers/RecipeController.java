@@ -33,7 +33,7 @@ public class RecipeController {
 	
 	private Map<String, String> imageURLs = new HashMap<String, String>() {{
 	    put("italian", "https://rp-cms.imgix.net/wp-content/uploads/AdobeStock_513646998-scaled.jpeg");
-	    put("mexican", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGG4fItW-8_gmL6SFaWmN-lejRx6OCDyBDVQ&s");
+	    put("mexican", "https://static1.squarespace.com/static/574bf01c2b8ddef6b349d7bf/t/6583f92642ec4f63cf744a6a/1703147849500/Chinita+-+Cover_Range+Shot.jpg?format=1500w");
 	    put("indian", "https://images.squarespace-cdn.com/content/v1/612d4825ee7c3b7ba3e215b7/1667458982443-N6XGU1PU7335QEMVUP7M/Delicious+food.png");
 	}};
 
