@@ -36,6 +36,7 @@ public class SpringErrorController {
             }
         }
         errorPage.addObject("errorMsg", errorMsg);
+        
         return errorPage;
     }
     
