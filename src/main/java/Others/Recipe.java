@@ -1,15 +1,15 @@
 package Others;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
@@ -45,9 +45,9 @@ public class Recipe implements Comparable<Recipe>, Cloneable, Serializable {
 	private Date dateLatestChange;
 	
 	
-	@Column(name = "user_user_id")
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,CascadeType.REFRESH })
 	@JoinColumn(name = "user_user_id")
-	private int userId;
+	private User user;
 	
 	public Recipe() {}
 	
@@ -61,19 +61,6 @@ public class Recipe implements Comparable<Recipe>, Cloneable, Serializable {
 		this.instructions = instructions;
 		this.dateAdded = dateAdded;
 		this.dateLatestChange = dateLatestChange;
-	}
-	
-	public Recipe(String name, String category, String description, String ingredients, String instructions,
-			Date dateAdded, Date dateLatestChange, int userId) {
-		super();
-		this.name = name;
-		this.category = category;
-		this.description = description;
-		this.ingredients = ingredients;
-		this.instructions = instructions;
-		this.dateAdded = dateAdded;
-		this.dateLatestChange = dateLatestChange;
-		this.userId = userId;
 	}
 
 	public int getId() {
@@ -173,11 +160,11 @@ public class Recipe implements Comparable<Recipe>, Cloneable, Serializable {
 		return clonedRecipe;
 	}
 	
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
+	public User getUser() {
+		return user;
+	}
+	
+	public void setUser(User user) {
+		this.user = user;
+	}
 }

@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -25,7 +24,7 @@ public class User implements Serializable {
 	@Column(name = "user_id")
 	private int id;
 	
-	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE})
+	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE })
 	private List<Recipe> recipes;
 	
 	@Column(name = "username")
@@ -77,6 +76,7 @@ public class User implements Serializable {
 	}
 	
 	public void addRecipe(Recipe recipe) {
+		recipe.setUser(this);
 		this.recipes.add(recipe);
 	}
 	

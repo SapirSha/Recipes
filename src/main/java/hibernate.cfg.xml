@@ -23,9 +23,6 @@
 
 		<!-- Set the current session context -->
 		<property name="current_session_context_class">thread</property>
- 
- 		<mapping class="Others.User"/>
-        <mapping class="Others.Recipe"/>
     </session-factory>
 
 </hibernate-configuration>

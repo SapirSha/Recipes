@@ -13,11 +13,11 @@ public class TestJDBC {
         	//Recipe recipe = new Recipe("12391230", "1234567823", "1", "1", "1", 
         	//		Date.valueOf("2025-02-17"), Date.valueOf("2025-02-17"), 23);
         	
-        	//User user = new User ("1234", "1234");
+        	User user = new User ("12345", "12345");
             session.beginTransaction();
             System.out.println("Saving the student...");
             //session.save(recipe);
-            //session.save(user);
+            session.save(user);
             session.getTransaction().commit();
             System.out.println("Done!");
         } catch (Exception e) {
