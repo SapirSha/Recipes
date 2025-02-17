@@ -119,5 +119,60 @@ public class APIController {
 		return new GeneralRestResponse(true, "success");
 	}
 	
+	@GetMapping("/editRecipe/ingredients/{username}/{password}/{recipeName}/{newIngredients}")
+	public GeneralRestResponse apiRecipeEditIngredients(@PathVariable String username, 
+			@PathVariable String password, @PathVariable String recipeName, 
+			@PathVariable String newIngredients) throws NoUserException, NoRecipeException, CloneNotSupportedException, InvalidRecipeException, IOException {
+		User user = checkAndGetUser(username, password);
+		
+		Recipe recipe = service.getRecipeClone(user, recipeName);
+		
+		recipe.setIngredients(newIngredients);
+		
+		service.editRecipe(user, recipe);
+		
+		return new GeneralRestResponse(true, "success");
+	}
 	
+	@GetMapping("/editRecipe/instructions/{username}/{password}/{recipeName}/{newInstructions}")
+	public GeneralRestResponse apiRecipeEditInstructions(@PathVariable String username, 
+			@PathVariable String password, @PathVariable String recipeName, 
+			@PathVariable String newInstructions) throws NoUserException, NoRecipeException, CloneNotSupportedException, InvalidRecipeException, IOException {
+		User user = checkAndGetUser(username, password);
+		
+		Recipe recipe = service.getRecipeClone(user, recipeName);
+		
+		recipe.setInstructions(newInstructions);
+		
+		service.editRecipe(user, recipe);
+		
+		return new GeneralRestResponse(true, "success");
+	}
+	
+	@GetMapping("/deleteRecipe/{username}/{password}/{recipeName}")
+	public GeneralRestResponse apiDeleteRecipe(@PathVariable String username, 
+			@PathVariable String password, @PathVariable String recipeName) throws InvalidRecipeException, NoRecipeException, IOException, NoUserException {
+		User user = checkAndGetUser(username, password);
+		
+		service.deleteRecipe(user, service.getRecipe(user, recipeName));
+		
+		return new GeneralRestResponse(true, "success");
+	}
+	
+	@GetMapping("/createRecipe/{username}/{password}/{recipeName}/{category}"
+			+ "/{description}/{ingredients}/{instructions}")
+	public GeneralRestResponse apiCreateRecipe(@PathVariable String username, 
+			@PathVariable String password, @PathVariable String recipeName, 
+			@PathVariable String category, @PathVariable String description, 
+			@PathVariable String ingredients, @PathVariable String instructions) 
+					throws InvalidRecipeException, NoRecipeException, 
+					IOException, NoUserException {
+		User user = checkAndGetUser(username, password);
+		
+		Recipe recipe = new Recipe(recipeName, category, description, ingredients, instructions, null, null);
+		
+		service.saveRecipe(user, recipe);
+		
+		return new GeneralRestResponse(true, "success");
+	}
 }
