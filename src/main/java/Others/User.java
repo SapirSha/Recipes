@@ -2,6 +2,9 @@ package Others;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import Others.Recipe;
 
 
@@ -10,6 +13,7 @@ public class User implements Serializable {
 	private int id;
 	private List<Recipe> recipes;
 	private String username;
+	@JsonIgnore
 	private String password;
 	
 	
