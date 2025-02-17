@@ -4,16 +4,50 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
+
+
+@Entity
+@Table(name = "recipe")
 public class Recipe implements Comparable<Recipe>, Cloneable, Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "recipe_id")
 	private int id;
+	
+	@Column(name = "recipe_name")
 	private String name;
+	
+	@Column(name = "recipe_category")
 	private String category;
+	
+	@Column(name = "recipe_description")
 	private String description;
+	
+	@Column(name = "recipe_ingredients")
 	private String ingredients;
+	
+	@Column(name = "recipe_instructions")
 	private String instructions;
+	
+	@Column(name = "date_added")
 	private Date dateAdded;
+	
+	@Column(name = "date_latest_change")
 	private Date dateLatestChange;
+	
+	
+	@Column(name = "user_user_id")
+	@JoinColumn(name = "user_user_id")
+	private int userId;
 	
 	public Recipe() {}
 	
@@ -27,6 +61,19 @@ public class Recipe implements Comparable<Recipe>, Cloneable, Serializable {
 		this.instructions = instructions;
 		this.dateAdded = dateAdded;
 		this.dateLatestChange = dateLatestChange;
+	}
+	
+	public Recipe(String name, String category, String description, String ingredients, String instructions,
+			Date dateAdded, Date dateLatestChange, int userId) {
+		super();
+		this.name = name;
+		this.category = category;
+		this.description = description;
+		this.ingredients = ingredients;
+		this.instructions = instructions;
+		this.dateAdded = dateAdded;
+		this.dateLatestChange = dateLatestChange;
+		this.userId = userId;
 	}
 
 	public int getId() {
@@ -125,4 +172,12 @@ public class Recipe implements Comparable<Recipe>, Cloneable, Serializable {
 		 
 		return clonedRecipe;
 	}
+	
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 }
