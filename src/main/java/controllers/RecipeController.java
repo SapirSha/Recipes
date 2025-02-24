@@ -152,6 +152,12 @@ public class RecipeController {
 			User user = (User)request.getSession().getAttribute("user");
 
 			service.editRecipe(user, recipe);
+			
+			user = service.getUserByName(user.getUsername());
+			request.getSession().setAttribute("user", user);
+			model.addAttribute("recipeList", user.getRecipes());
+			
+			
 		}
 		catch (NoRecipeException e) {
 			return "redirect:/MyRecipes";
@@ -168,13 +174,13 @@ public class RecipeController {
 			return "redirect:/ShowRecipe?SaveError=true";
 		}
 		
-		List<Recipe> recipeList = ((User)request.getSession().getAttribute("user")).getRecipes();
+		// List<Recipe> recipeList = ((User)request.getSession().getAttribute("user")).getRecipes();
 		
-		for (Recipe r : recipeList) {
-			System.out.println(r);
-		}
+		//for (Recipe r : recipeList) {
+		//	System.out.println(r);
+		//}
 		
-		model.addAttribute("recipeList", recipeList);
+		//model.addAttribute("recipeList", recipeList);
 		
 		return "MyRecipes";
 	}

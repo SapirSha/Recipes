@@ -50,7 +50,7 @@ public class AuthController {
                 request.getSession().setAttribute("user", savedUser);
                 return "redirect:/";
             }
-        } catch (NoUserException e) {
+        } catch (NoUserException | IOException e) {
             System.out.println(e.getMessage());
         }
         

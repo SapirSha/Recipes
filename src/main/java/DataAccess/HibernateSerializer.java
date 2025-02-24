@@ -2,12 +2,15 @@ package DataAccess;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.model.relational.Database;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
@@ -23,232 +26,293 @@ import Others.User;
 @Component
 public class HibernateSerializer implements ISerializer {
 	
-	//TODO add everything here
+	// STATUS: everything seems to be working
+	// To add potentially: dateLastestChange (seems to work properly with dateAdded)
 	
 	private SessionFactory factory;
 	
 	@PostConstruct
-	public void getRecipes() {
+	public void initializeSessionFactory() {
 		
 		factory = new Configuration()
 				.configure("hibernate.cfg.xml")
 				.addAnnotatedClass(User.class)
 				.addAnnotatedClass(Recipe.class)
 				.buildSessionFactory();
-		
-		Session session = factory.getCurrentSession();
-//		try	{
-//			session.beginTransaction();
-//			Query<User> query = session.createQuery("from User", User.class);
-//			users = query.getResultList();
-//			
-//			for (User user : users) {
-//				int userId = user.getId();
-//				Query<Recipe> recipeQuery = session.createQuery(
-//						"from Recipe r where r.user.id = :userId", Recipe.class);
-//				recipeQuery.setParameter("userId", userId);
-//	            
-//	            List<Recipe> recipes = recipeQuery.getResultList();
-//	            for (Recipe recipe : recipes) {
-//	            	user.addRecipe(recipe);
-//	            }
-//	        }
-//			
-//		} finally {
-//			session.close();
-//			factory.close();
-//		}
 	}
 	
-	public void SerializeData(List<User> users) throws IOException {
-		SessionFactory factory = new Configuration()
-				 .configure("hibernate.cfg.xml")
-				 .buildSessionFactory();
+	@PreDestroy
+	public void closeSessionFactory() {
+		factory.close();
+	}
+	
+	// throws exception if no such user exists, or if something went wrong when accessing the database
+	public void userExistsQuery(User user) throws NoUserException, IOException {
+		Session session = factory.getCurrentSession();
+		session.beginTransaction();
+		try {		
+			User userFromDB = session.get(User.class, user.getId());
+			if (userFromDB == null)
+				throw new NoUserException("User '" + user.getUsername() + "' does not exist.");
+			//Query<User> userExistsQuery = session.createQuery("FROM User WHERE user_id = :userId", User.class);
+			//userExistsQuery.setParameter("userId", user.getId());
+			//if (userExistsQuery.uniqueResult() == null)
+			//	throw new NoUserException("User '" + user.getUsername() + "' does not exist.");
+		} catch (NoUserException e) {
+			throw e;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new IOException("Something went wrong when accessing the database");
+		} finally {
+			session.close();
+		}
+	}
+
+	// throws exception if user doesn't have a recipe with name recipe.getName(),
+	// or if something went wrong when accessing the database
+	public void recipeNameExistsQuery(User user, Recipe recipe) throws NoUserException, IOException, NoRecipeException {
+		userExistsQuery(user);
 		
 		Session session = factory.getCurrentSession();
-		
-		try {
-			 session.beginTransaction();
-			 for (User user : users) {
-				 session.save(user);
-				 for (Recipe recipe: user.getRecipes())
-					 session.save(recipe);
-			 }
-			 session.getTransaction().commit();
+		session.beginTransaction();
+		try {		
+			Query<Recipe> recipeExistsQuery = session.createQuery(
+					"FROM Recipe WHERE recipe_name = :recipeName AND user_user_id = :userId", Recipe.class);
+			recipeExistsQuery.setParameter("recipeName", recipe.getName());
+			recipeExistsQuery.setParameter("userId", user.getId());
+			
+			if (recipeExistsQuery.uniqueResult() == null)
+				throw new NoRecipeException("Recipe with the name '" + recipe.getName() + "' doesn't exist.");
+		} catch (NoRecipeException e) {
+			throw e;			
 		} catch (Exception e) {
-            throw new IOException("Error saving data");
+			throw new IOException("Something went wrong when accessing the database");
+		} finally {
+			session.close();
 		}
-	}	
-
+	}
+	
 	@Override
-	public boolean recipeExistsByName(String name) {
-
-		for (User user : users) {
-			for (Recipe recipe : user.getRecipes()) {
-				if (recipe.getName().equalsIgnoreCase(name)) {
-					return true;
-				}
-			}
+	public boolean recipeExistsByName(User user, String name) throws IOException {
+		try {
+			
+			userExistsQuery(user);
+		} catch(NoUserException e) {
+			return false;
 		}
-		return false;
+		
+		Session session = factory.getCurrentSession();
+		session.beginTransaction();
+		try {							
+			Query<Recipe> recipeExistsQuery = session.createQuery(
+					"FROM Recipe WHERE recipe_name = :recipeName AND user_user_id = :userId", Recipe.class);
+			recipeExistsQuery.setParameter("recipeName", name);
+			recipeExistsQuery.setParameter("userId", user.getId());
+			
+			Recipe recipe = recipeExistsQuery.uniqueResult();
+			if (recipe == null)
+				return false;
+			
+			return true;
+		} catch (Exception e) {
+			throw new IOException("Something went wrong when accessing the database");
+		} finally {
+			session.close();
+		}
 	}
 
 	@Override
-	public boolean recipeExistsById(int id) {
-		for (User user : users) {
-			for (Recipe recipe : user.getRecipes()) {
-				if (recipe.getId() == id) {
-					return true;
-				}
-			}
+	public boolean recipeExistsById(int id) throws IOException {
+		Session session = factory.getCurrentSession();
+		session.beginTransaction();
+		try {		
+			Query<Recipe> recipeExistsQuery = session.createQuery(
+					"FROM Recipe WHERE recipe_id = :recipeId", Recipe.class);
+			recipeExistsQuery.setParameter("recipeId", id);
+			
+			Recipe recipe = recipeExistsQuery.uniqueResult();
+			
+			if (recipe == null)
+				return false;
+			
+			return true;
+			
+		} catch (Exception e) {
+			throw new IOException("Something went wrong when accessing the database");
+		} finally {
+			session.close();
 		}
-		return false;
 	}
 
 	@Override
 	public void saveRecipe(User user, Recipe recipe) throws IOException, NoUserException, InvalidRecipeException {
-		if (!users.contains(user))
-			throw new NoUserException("User '" + user.getUsername() + "' does not exist.");
+		userExistsQuery(user);
 		
-		for (Recipe r : user.getRecipes()) {
-			if (r.getName().equals(recipe.getName()))
-				throw new InvalidRecipeException("Recipe with the name '" + recipe.getName() + "' already exists.");
-		}
-		
-		user.addRecipe(recipe);
+		Session session = factory.getCurrentSession();
+		session.beginTransaction();
+		try {		
 
-		SerializeData(users);
+			recipe.setUser(user);
+			Query<Recipe> recipeExistsQuery = session.createQuery(
+					"FROM Recipe WHERE recipe_name = :recipeName AND user_user_id = :userId", Recipe.class);
+			recipeExistsQuery.setParameter("recipeName", recipe.getName());
+			recipeExistsQuery.setParameter("userId", user.getId());
+			
+			
+			if (recipeExistsQuery.uniqueResult() != null)
+				throw new InvalidRecipeException("Recipe with the name '" + recipe.getName() + "' already exists.");
+			
+			user.add(recipe);
+			session.save(recipe);
+			session.getTransaction().commit();
+			
+		} catch (InvalidRecipeException e) {
+			throw e;
+		} catch (Exception e) {
+			user.removeRecipe(recipe);
+			session.getTransaction().rollback();
+			throw new IOException("Something went wrong, did not save");
+		} finally {
+			session.close();
+		}
 	}
 
 	@Override
 	public void deleteRecipe(User user, Recipe recipe) throws NoRecipeException, IOException, NoUserException {
-		if (!users.contains(user))
-			throw new NoUserException("User '" + user.getUsername() + "' does not exist.");
+		userExistsQuery(user);
+		recipeNameExistsQuery(user, recipe);
 		
-		if (!user.getRecipes().contains(recipe))
-			throw new NoRecipeException("Recipe '" + recipe.getName() + "' does not exist.");
-		
-		user.getRecipes().remove(recipe);
-		
-		SerializeData(users);
+		Session session = factory.getCurrentSession();
+		session.beginTransaction();
+		try {
+			user.removeRecipe(recipe);
+			session.remove(recipe);
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			user.add(recipe);
+			session.getTransaction().rollback();
+			throw new IOException("Something went wrong, did not delete");
+		} finally {
+			session.close();
+		}
 	}
 
 	@Override
 	public void editRecipe(User user, Recipe changedRecipe) throws NoRecipeException, IOException, NoUserException {
-		if (!users.contains(user))
-			throw new NoUserException("User '" + user.getUsername() + "' does not exist.");
+		userExistsQuery(user);
 		
-		if (user.getRecipes().contains(changedRecipe)) {
-			user.getRecipes().set(user.getRecipes().indexOf(changedRecipe), changedRecipe);
-			SerializeData(users);
-			return;
+		Session session = factory.getCurrentSession();
+		session.beginTransaction();
+		
+		Recipe existingRecipe = session.get(Recipe.class, changedRecipe.getId());
+		 if (existingRecipe == null) {
+	            throw new NoRecipeException("Attempting to edit a non-existent recipe");
+	        }
+		 
+		try {
+			existingRecipe.setName(changedRecipe.getName());
+			existingRecipe.setCategory(changedRecipe.getCategory());
+			existingRecipe.setDescription(changedRecipe.getDescription());
+			existingRecipe.setIngredients(changedRecipe.getIngredients());
+			existingRecipe.setInstructions(changedRecipe.getInstructions());
+			existingRecipe.setDateLatestChange(changedRecipe.getDateLatestChange());
+			session.update(existingRecipe);
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			session.getTransaction().rollback();
+			throw new IOException("Something went wrong, edit was not saved");
+		} finally {
+			session.close();
 		}
-		
-		throw new NoRecipeException("Recipe '" + changedRecipe.getName() + "' does not exist.");
 	}
 
 	@Override
-	public Recipe getRecipeByName(User user, String name) throws NoRecipeException, NoUserException {
-		if (!users.contains(user))
-			throw new NoUserException("User '" + user.getUsername() + "' does not exist.");
+	public Recipe getRecipeByName(User user, String name) throws NoRecipeException, NoUserException, IOException {
+		userExistsQuery(user);
 		
-		for (Recipe recipe : user.getRecipes()) {
-			if (recipe.getName().equalsIgnoreCase(name)) {
-				return recipe;
-			}
-		}
-		
-		throw new NoRecipeException("Recipe '" + name + "' does not exist.");
+		Session session = factory.getCurrentSession();
+		session.beginTransaction();
+		try {
+			Query<Recipe> recipeExistsQuery = session.createQuery(
+					"FROM Recipe WHERE recipe_name = :recipeName AND user_user_id = :userId", Recipe.class);
+			recipeExistsQuery.setParameter("recipeName", name);
+			recipeExistsQuery.setParameter("userId", user.getId());
+			
+			Recipe recipe = recipeExistsQuery.uniqueResult();
+			if (recipe == null)
+				throw new NoRecipeException ("Recipe with the name '" + name + "' doesn't exist.");
+			
+			return recipe;
+			
+		} catch (NoRecipeException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new IOException("Something went wrong when accessing the database");
+		} finally {
+			session.close();
+		}		
 	}
 
 	@Override
-	public Recipe getRecipeById(int id) throws NoRecipeException {
-		//System.out.println(id);		
-		//System.out.println(users);
-		
-		for (User user : users) {
-			for (Recipe recipe : user.getRecipes()) {
-				//System.out.println(recipe);
-				if (recipe.getId() == id) {
-					return recipe;
-				}
-			}
+	public Recipe getRecipeById(int id) throws NoRecipeException, IOException {
+		Session session = factory.getCurrentSession();
+		session.beginTransaction();
+		try {		
+			Query<Recipe> recipeExistsQuery = session.createQuery(
+					"FROM Recipe WHERE recipe_id = :recipeId", Recipe.class);
+			recipeExistsQuery.setParameter("recipeId", id);
+			
+			Recipe recipe = recipeExistsQuery.uniqueResult();
+			
+			if (recipe == null)
+				throw new NoRecipeException("Recipe with the id " + id + " does not exist.");
+			
+			return recipe;
+			
+		} catch (Exception e) {
+			throw new IOException("Something went wrong when accessing the database");
+		} finally {
+			session.close();
 		}
+	}
+	
+	@Override
+	public List<Recipe> getRecipesByCategory(User user, String category) throws NoUserException, IOException {
+		userExistsQuery(user);
 		
-		throw new NoRecipeException("Recipe with the id " + id + " does not exist.");
+		Session session = factory.getCurrentSession();
+		session.beginTransaction();
+		
+		try {
+			Query<Recipe> getRecipesByCategoryQuery = session.createQuery(
+				    "FROM Recipe WHERE recipe_category = :category AND user_user_id = :userId", Recipe.class);
+			getRecipesByCategoryQuery.setParameter("category", category);
+			getRecipesByCategoryQuery.setParameter("userId", user.getId());
+
+			return getRecipesByCategoryQuery.getResultList();
+		} catch (Exception e) {
+			throw new IOException("Something went wrong when accessing the database");
+		}
 	}
 
 	@Override
-	public List<Integer> getRecipeIds() {
-		List<Integer> recipeIds = new ArrayList<Integer>();
+	public List<Recipe> getAllUserRecipes(User user) throws NoUserException, IOException {
+		userExistsQuery(user);
 		
-		for (User user : users) {
-			for (Recipe recipe : user.getRecipes()) {
-				recipeIds.add(recipe.getId());
-			}
-		}
-		
-		return recipeIds;
-	}
+		Session session = factory.getCurrentSession();
+		session.beginTransaction();
+		try {
+			Query<Recipe> getUserRecipesQuery = session.createQuery(
+				    "FROM Recipe WHERE user_user_id = :userId", Recipe.class);
+			getUserRecipesQuery.setParameter("userId", user.getId());
 
-	@Override
-	public List<String> getRecipeNames() {
-		List<String> recipeNames = new ArrayList<String>();
-		
-		for (User user : users) {
-			for (Recipe recipe : user.getRecipes()) {
-				recipeNames.add(recipe.getName());
-			}
+			return getUserRecipesQuery.getResultList();
+		} catch (Exception e) {
+			throw new IOException("Something went wrong when accessing the database");
+		} finally {
+			session.close();
 		}
-		
-		return recipeNames;
-	}
-
-	@Override
-	public List<Integer> getRecipesIdByCategory(String category) {
-		List<Integer> recipeIds = new ArrayList<Integer>();
-		
-		for (User user : users) {
-			for (Recipe recipe : user.getRecipes()) {
-				if (recipe.getCategory().equalsIgnoreCase(category))
-					recipeIds.add(recipe.getId());
-			}
-		}
-		
-		return recipeIds;
-	}
-
-	@Override
-	public List<Recipe> getAllRecipes() {
-		ArrayList<Recipe> tempRecipes = new ArrayList<>();
-		
-		for (User user : users) {
-			for (Recipe recipe : user.getRecipes()) {
-				tempRecipes.add(recipe);
-			}
-		}
-		
-		return tempRecipes;
-	}
-
-	@Override
-	public List<Recipe> getRecipesByCategory(User user, String category) throws NoUserException {
-		if (!users.contains(user))
-			throw new NoUserException("User '" + user.getUsername() + "' does not exist.");
-		
-		ArrayList<Recipe> tempRecipes = new ArrayList<>();
-		
-		for (Recipe recipe : user.getRecipes()) {
-			if (recipe.getCategory().equalsIgnoreCase(category))
-				tempRecipes.add(recipe);
-		}
-		
-		return tempRecipes;
-	}
-
-	@Override
-	public List<Recipe> getAllUserRecipes(User user) {
-		return user.getRecipes();
 	}
 
 	@Override
@@ -256,42 +320,117 @@ public class HibernateSerializer implements ISerializer {
 		if (user.getUsername() == null || user.getPassword() == null)
 			throw new InvalidUserException("User must have username and password!");
 		
-		for (User u : users) {
-			if (u.getUsername().equals(user.getUsername())) {
-				throw new InvalidUserException("User with the name '" + user.getUsername() + "' already exists.");
-			}
+		Session session = factory.getCurrentSession();
+		session.beginTransaction();
+		try {		
+			Query<User> userExistsQuery = session.createQuery("FROM User WHERE user_id = :userId", User.class);
+			userExistsQuery.setParameter("userId", user.getId());
+			if (userExistsQuery.uniqueResult() != null)
+				throw new InvalidUserException("User with the name'" + user.getUsername() + "' already exists.");
+			
+			session.save(user);
+			session.getTransaction().commit(); 
+			
+		} catch (InvalidUserException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new IOException("Something went wrong when accessing the database");
+		} finally {
+			session.close();
 		}		
-		users.add(user);		
-		SerializeData(users);
 	}
 
+	// Don't think this is needed
 	@Override
 	public void deleteUser(User user) throws NoUserException, IOException {
-		if (!users.contains(user))
-			throw new NoUserException("User '" + user.getUsername() + "' does not exist.");
+		userExistsQuery(user);
 		
-		users.remove(user);
+		Session session = factory.getCurrentSession();
+		session.beginTransaction();
 		
-		SerializeData(users);
+		try {
+			session.remove(user);
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			throw new IOException("Something went wrong, did not delete");
+		} finally {
+			session.close();
+		}
 	}
 
 	@Override
-	public User getUserByName(String username) throws NoUserException {
-		for (User user : users) {
-			if (user.getUsername().equals(username))
-				return user;
-		}
+	public User getUserByName(String username) throws NoUserException, IOException {
 		
-		throw new NoUserException("User with the name '" + username + "' does not exist.");
+		Session session = factory.getCurrentSession();
+		session.beginTransaction();
+		try {		
+			Query<User> userExistsQuery = session.createQuery("FROM User WHERE username = :username", User.class);
+			userExistsQuery.setParameter("username", username);
+			
+			User user = userExistsQuery.uniqueResult();
+			//User user = session.get(User.class, username);
+			System.out.println(user);
+			System.out.println(user.getRecipes());
+			if (user == null)
+				throw new NoUserException("User with the name '" + username + "' does not exist.");
+			
+			return user;
+			
+		} catch (NoUserException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new IOException("Something went wrong when accessing the database");
+		} finally {
+			session.close();
+		}
 	}
 
 	@Override
-	public User getUserById(int id) throws NoUserException {
-		for (User user : users) {
-			if (user.getId() == id)
-				return user;
+	public User getUserById(int id) throws NoUserException, IOException {
+		Session session = factory.getCurrentSession();
+		session.beginTransaction();
+		try {		
+			//Query<User> userExistsQuery = session.createQuery("FROM User WHERE user_id = :userId", User.class);
+			//userExistsQuery.setParameter("userId", id);
+			
+			
+			//User user = userExistsQuery.uniqueResult();
+			User user = session.get(User.class, id);
+			System.out.println(user);
+			System.out.println(user.getRecipes());
+			if (user == null)
+				throw new NoUserException("User with the id '" + id + "' does not exist.");
+			
+			return user;
+			
+		} catch (NoUserException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new IOException("Something went wrong when accessing the database");
+		} finally {
+			session.close();
 		}
-		
-		throw new NoUserException("User with the id " + id + " does not exist.");
+	}	
+	
+	// THESE FUNCTIONS ARE NEVER USED
+	
+	@Override
+	public List<String> getRecipeNames() {
+		return null;
+	}
+	
+	@Override
+	public List<Integer> getRecipesIdByCategory(String category) {
+		return null;
+	}
+	
+	@Override
+	public List<Recipe> getAllRecipes() { 
+		return null;
+	}
+	
+	@Override
+	public List<Integer> getRecipeIds() {
+		return null;
 	}
 }
