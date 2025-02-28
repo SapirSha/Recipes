@@ -34,17 +34,17 @@ public class Service {
 	public void saveRecipe(User user, Recipe recipe) throws InvalidRecipeException, IOException, NoUserException {
 		validate(recipe); // throws InvalidRecipe Exception
 
-		if (serializer.recipeExistsByName(recipe.getName()))
+		if (serializer.recipeExistsByName(user, recipe.getName()))
 			throw new InvalidRecipeException("Recipe already exists!\n");
 
 		serializer.saveRecipe(user, recipe);
 	}
 
-	public Recipe getRecipe(User user, String name) throws NoRecipeException, NoUserException {
+	public Recipe getRecipe(User user, String name) throws NoRecipeException, NoUserException, IOException {
 		return serializer.getRecipeByName(user, name);
 	}
 
-	public Recipe getRecipeClone(User user, String name) throws CloneNotSupportedException, NoRecipeException, NoUserException {
+	public Recipe getRecipeClone(User user, String name) throws CloneNotSupportedException, NoRecipeException, NoUserException, IOException {
 		Recipe r = getRecipe(user, name);
 
 		if (r == null) {
@@ -54,7 +54,7 @@ public class Service {
 		return r.clone();
 	}
 
-	public Recipe getRecipe(int id) throws NoRecipeException {
+	public Recipe getRecipe(int id) throws NoRecipeException, IOException {
 		return serializer.getRecipeById(id);
 	}
 
@@ -62,7 +62,7 @@ public class Service {
 		return serializer.getAllRecipes();
 	}
 
-	public List<Recipe> getAllRecipesFromCategory(User user, String category) throws NoUserException {
+	public List<Recipe> getAllRecipesFromCategory(User user, String category) throws NoUserException, IOException {
 		return serializer.getRecipesByCategory(user, category);
 	}
 
@@ -80,7 +80,7 @@ public class Service {
 			throw new NoRecipeException("not an existing recipe!");
 		
 		if (!newInfo.getName().equalsIgnoreCase(oldInfo.getName())) {
-			if (serializer.recipeExistsByName(newInfo.getName())) {
+			if (serializer.recipeExistsByName(user, newInfo.getName())) {
 				throw new InvalidRecipeException("New name already exists for a differenct recipe!");
 			}
 		}
@@ -88,7 +88,7 @@ public class Service {
 		serializer.editRecipe(user, newInfo);
 	}
 	
-	public User getUserByName(String username) throws NoUserException {
+	public User getUserByName(String username) throws NoUserException, IOException {
 		return serializer.getUserByName(username);
 	}
 	

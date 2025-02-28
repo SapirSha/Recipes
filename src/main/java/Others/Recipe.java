@@ -1,19 +1,53 @@
 package Others;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+
+@Entity
+@Table(name = "recipe")
 public class Recipe implements Comparable<Recipe>, Cloneable, Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "recipe_id")
 	private int id;
+	
+	@Column(name = "recipe_name")
 	private String name;
+	
+	@Column(name = "recipe_category")
 	private String category;
+	
+	@Column(name = "recipe_description")
 	private String description;
+	
+	@Column(name = "recipe_ingredients")
 	private String ingredients;
+	
+	@Column(name = "recipe_instructions")
 	private String instructions;
+	
+	@Column(name = "date_added")
 	private Date dateAdded;
+	
+	@Column(name = "date_latest_change")
 	private Date dateLatestChange;
+	
+	
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,CascadeType.REFRESH })
+	@JoinColumn(name = "user_user_id")
+	private User user;
 	
 	public Recipe() {}
 	
@@ -124,5 +158,13 @@ public class Recipe implements Comparable<Recipe>, Cloneable, Serializable {
 		 clonedRecipe.dateLatestChange = (Date) dateLatestChange.clone();
 		 
 		return clonedRecipe;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+	
+	public void setUser(User user) {
+		this.user = user;
 	}
 }
