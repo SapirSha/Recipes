@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 @Table(name = "recipe")
@@ -44,7 +46,7 @@ public class Recipe implements Comparable<Recipe>, Cloneable, Serializable {
 	@Column(name = "date_latest_change")
 	private Date dateLatestChange;
 	
-	
+	@JsonIgnore
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,CascadeType.REFRESH })
 	@JoinColumn(name = "user_user_id")
 	private User user;
@@ -154,8 +156,12 @@ public class Recipe implements Comparable<Recipe>, Cloneable, Serializable {
 	@Override
 	public Recipe clone() throws CloneNotSupportedException {
 		 Recipe clonedRecipe = (Recipe) super.clone();
-		 clonedRecipe.dateAdded = (Date) dateAdded.clone();
-		 clonedRecipe.dateLatestChange = (Date) dateLatestChange.clone();
+		 
+		 if (dateAdded != null)
+			 clonedRecipe.dateAdded = (Date) dateAdded.clone();
+		 
+		 if (dateLatestChange != null)
+			 clonedRecipe.dateLatestChange = (Date) dateLatestChange.clone();
 		 
 		return clonedRecipe;
 	}
