@@ -34,7 +34,7 @@ public class APIController {
 	@Autowired
 	private Service service;
 	
-	private User checkAndGetUser(String username, String password) throws NoUserException {
+	private User checkAndGetUser(String username, String password) throws NoUserException, IOException {
 		try {
 			User user = service.getUserByName(username);
 			
@@ -65,19 +65,19 @@ public class APIController {
 	
 	@GetMapping("/user/{username}/{password}")
 	public User apiGetUser(@PathVariable String username, 
-			@PathVariable String password) throws NoUserException {
+			@PathVariable String password) throws NoUserException, IOException {
 		return checkAndGetUser(username, password);
 	}
 	
 	@GetMapping("/allRecipes/{username}/{password}")
 	public List<Recipe> apiGetAllRecipes(@PathVariable String username, 
-			@PathVariable String password) throws NoUserException {
+			@PathVariable String password) throws NoUserException, IOException {
 		return checkAndGetUser(username, password).getRecipes();
 	}
 	
 	@GetMapping("/findRecipe/{username}/{password}/{recipeName}")
 	public Recipe apiGetRecipe(@PathVariable String username, 
-			@PathVariable String password, @PathVariable String recipeName) throws NoUserException, NoRecipeException {
+			@PathVariable String password, @PathVariable String recipeName) throws NoUserException, NoRecipeException, IOException {
 		return service.getRecipe(checkAndGetUser(username, password), recipeName);
 	}
 	
