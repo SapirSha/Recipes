@@ -2,6 +2,7 @@ package controllers;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 
@@ -64,7 +65,7 @@ public class MainController {
 		}
 		
 		model.addAttribute("recipeList", recipeList);
-		
+	    
 		return "MyRecipes";
 	}
     
@@ -111,19 +112,20 @@ public class MainController {
     
     
     @RequestMapping("/SearchRecipe")
-	public String showSearchRecipePage(Model model, HttpServletRequest request) {
+	public String showSearchRecipePage(Model model, @RequestParam(value = "searchQuery", required = false) String searchQuery, HttpServletRequest request) {
 		List<Recipe> recipeList;
 		try {
-			recipeList = service.getAllPublicRecipes();
+			if (searchQuery == null)
+				recipeList = service.getAllPublicRecipes();
+			
+			else {
+				recipeList = service.getAllRecipesWithNameLike(searchQuery);
+				}
 		} catch (IOException e) {
 			return "redirect:/";
 		}
-		
-		for (Recipe r : recipeList) {
-			System.out.println(r);
-		}
-		
 		model.addAttribute("recipeList", recipeList);
+
     	
 		return "SearchRecipe";
 	}

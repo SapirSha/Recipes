@@ -449,6 +449,34 @@ public class HibernateSerializer implements ISerializer {
 			session.close();
 		}
 	}
+	@Override
+	public List<Recipe> getAllRecipesWithNameLike(String recipename) throws IOException {
+		Session session = factory.getCurrentSession();
+		session.beginTransaction();
+		try {
+			Query<Recipe> getRecipesQuery = session.createQuery(
+					"FROM Recipe r WHERE r.name LIKE :recipesName",
+				    Recipe.class
+			);
+			getRecipesQuery.setParameter("recipesName", "%" + recipename + "%");
+
+			List<Recipe> result = getRecipesQuery.getResultList();
+			List<Recipe> publicResult= new ArrayList<Recipe>();
+			
+			for (Recipe recipe : result) {
+				if (recipe.getIsPrivate() == 0)
+					publicResult.add(recipe);
+			}
+			return publicResult;
+		} catch (Exception e) {
+			throw new IOException("Something went wrong when accessing the database");
+		} finally {
+			session.close();
+		}
+	}
+	
+
+
 	// THESE FUNCTIONS ARE NEVER USED
 	
 	@Override

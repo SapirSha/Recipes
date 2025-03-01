@@ -65,4 +65,6 @@ public interface ISerializer {
 	public User getUserByName(String username) throws NoUserException, IOException;
 	
 	public User getUserById(int id) throws NoUserException, IOException;
+
+	public List<Recipe> getAllRecipesWithNameLike(String recipename) throws IOException;	
 }

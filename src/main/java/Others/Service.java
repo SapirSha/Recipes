@@ -1,5 +1,6 @@
 package Others;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,7 @@ public class Service {
 	public Recipe getRecipe(int id) throws NoRecipeException, IOException {
 		return serializer.getRecipeById(id);
 	}
+	
 
 	public List<Recipe> getAllRecipes() {
 		return serializer.getAllRecipes();
@@ -155,5 +157,14 @@ public class Service {
 
 	public boolean isValidInstructions(String instructions) {
 		return instructions != null && !instructions.trim().replaceAll("[ \n\t]", "").isEmpty() && instructions.length() <= maxInstructions;
+	}
+	
+	public List<Recipe> getAllRecipesWithNameLike(String recipename){
+		try {
+			return serializer.getAllRecipesWithNameLike(recipename);
+		}catch (IOException e) {
+			System.out.println("IOE EXCEPTION");
+			return new ArrayList<Recipe>();
+		}
 	}
 }
