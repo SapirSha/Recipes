@@ -221,8 +221,26 @@ button:hover {
                     <form:textarea path="instructions" id="recipe-instructions" class="input-field" style="display:none;" oninput="autoExpandTextarea(event)"></form:textarea>
                 </div>
 
+
                  <c:choose>
 				    <c:when test="${Editable == true}">
+					<div class="editable">
+					  <strong>Is Recipe Private?</strong>
+					  <span class="display-value" id="display-privacy">
+					    ${recipe.isPrivate == 1 ? 'Yes' : 'No'}
+					  </span>
+					  
+					  <div class="input-field" style="display:none;border:none;">
+					    <form:radiobutton path="isPrivate" id="recipe_private_yes" value="1" />
+					    <label for="recipe_private_yes" style="margin-right:5%">Yes</label>
+					    <form:radiobutton path="isPrivate" id="recipe_private_no" value="0" />
+					    <label for="recipe_private_no">No</label>
+					  </div>
+					</div>
+
+
+
+				
 						<div id="error-message" style="display: none;" class="error-message">
 						    Recipe name is already registered!
 						</div>

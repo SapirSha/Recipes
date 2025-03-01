@@ -216,6 +216,7 @@ public class HibernateSerializer implements ISerializer {
 			existingRecipe.setIngredients(changedRecipe.getIngredients());
 			existingRecipe.setInstructions(changedRecipe.getInstructions());
 			existingRecipe.setDateLatestChange(changedRecipe.getDateLatestChange());
+			existingRecipe.setIsPrivate((changedRecipe.getIsPrivate()));
 			session.update(existingRecipe);
 			session.getTransaction().commit();
 		} catch (Exception e) {

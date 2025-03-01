@@ -38,9 +38,16 @@
                     <strong>Instructions:</strong> <span>${recipe.instructions}</span>
                     <form:textarea path="instructions" id="recipe-instructions" class="input-field" oninput="autoExpandTextarea(event)"></form:textarea>
                 </div>
+                <div class="editable">
+                    <strong>Is Recipe Private?</strong> <span>${recipe.isPrivate}</span>
+                    <form:checkbox path="isPrivate" id="recipe_private" class="input-field"></form:checkbox>
+                </div>
                 <c:choose>
 				    <c:when test="${Editable == true}">
-
+				         <div class="edit-button">
+		                    <button type="button" id="editButton" class="edit-btn" onclick="toggleEditMode()">Edit</button>
+		                    <button type="submit" id="saveButton" class="save-btn">Save</button>
+		                </div>
 		                
 						<div id="error-message input-field" style="display: none;" class="error-message">
 						    Recipe name is already registered!

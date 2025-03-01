@@ -49,13 +49,20 @@ public class RecipeController {
 	                                @RequestParam("instructions") String instructions,
 	                                RedirectAttributes redirectAttributes) {
 	    // Create and populate a Recipe object
-	    Recipe recipe = new Recipe(name, category, description, ingredients, instructions, new Date(), new Date());
-	    recipe.setId(id);
+	    try {
+		Recipe recipe = service.getRecipe(id);
 	    // Add as a flash attribute (retained only for the next request)
 	    redirectAttributes.addFlashAttribute("ShowRecipe", recipe);
 	    
 	    // Redirect to the second method
 	    return "redirect:/ShowRecipe";
+	    }
+	    catch(IOException e) {
+	    	return "redirect:/";
+	    } catch(NoRecipeException e) {
+	    	return "redirect:/SearchRecipe";
+	    }
+
 	}
 
 
@@ -142,9 +149,10 @@ public class RecipeController {
     }
 	
 	@PostMapping("/SaveRecipe")
-	public String editRecipeProcess(@ModelAttribute("recipe") Recipe recipe,
+	public String editRecipeProcess(@ModelAttribute("ShowRecipe") Recipe recipe,
 			HttpServletRequest request, Model model,
 			RedirectAttributes redirectAttributes) {
+		
 		
 		if (request.getSession(false) == null || request.getSession().getAttribute("user") == null) // Check if the user has a session
 			return "redirect:/";
