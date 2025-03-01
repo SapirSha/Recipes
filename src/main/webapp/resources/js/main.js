@@ -97,18 +97,15 @@
                     modalContent.classList.remove("hide");
                 }, 400); 
             }
-            // Close modal when 'x' is clicked
             closeBtn.onclick = function() {
                 closeModal();
             }
             
-            // Close modal when clicking outside of modal content
             window.onclick = function(event) {
                 if (event.target == modal) {
                     closeModal();
                 }
             }
-            // Function to switch between login and signup
             function openTab(tabName) {
                 if(tabName === 'login') {
                     loginContent.classList.add('active');
@@ -122,7 +119,6 @@
                     signUpTabBtn.classList.add('active');
                 }
             }
-            // Add event listeners to tab buttons
             loginTabBtn.onclick = function() { openTab('login'); }
             signUpTabBtn.onclick = function() { openTab('signup'); }
         });

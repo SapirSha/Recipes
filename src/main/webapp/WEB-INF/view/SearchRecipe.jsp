@@ -108,7 +108,7 @@ justify-content: right;
         .search-button {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #007BFF;
+            background-color:		#228B22;
             color: #fff;
             border: none;
             border-radius: 4px;
@@ -117,7 +117,7 @@ justify-content: right;
         }
 
         .search-button:hover {
-            background-color: #0056b3;
+            background-color: 	#228B22;
         }
 
         .search-button:active {

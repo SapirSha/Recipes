@@ -303,21 +303,20 @@
 		.recipe-table td input[type="radio"] {
 		    margin: 0;
 		    padding: 0;
-		    vertical-align: middle;  /* Align the radio button vertically */
+		    vertical-align: middle;  
 		}
 		
 		.recipe-table td div {
-		    text-align: center;  /* Center the radio button horizontally */
+		    text-align: center;
 		}
 		
 		.recipe-table td:first-child {
-		    width: 50px; /* Example width, adjust as needed */
+		    width: 50px; 
 		}
 		
-		/* Responsive Design (Optional - Adjust as needed) */
 		@media (max-width: 768px) {
 		    .content {
-		        margin-left: 0;  /* Reset margin for full width */
+		        margin-left: 0; 
 		        padding: 10px;
 		    }
 		
