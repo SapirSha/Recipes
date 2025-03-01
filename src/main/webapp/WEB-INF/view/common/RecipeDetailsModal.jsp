@@ -38,14 +38,20 @@
                     <strong>Instructions:</strong> <span>${recipe.instructions}</span>
                     <form:textarea path="instructions" id="recipe-instructions" class="input-field" oninput="autoExpandTextarea(event)"></form:textarea>
                 </div>
-                <div class="edit-button">
-                    <button type="button" id="editButton" class="edit-btn" onclick="toggleEditMode()">Edit</button>
-                    <button type="submit" id="saveButton" class="save-btn">Save</button>
-                </div>
+                <c:choose>
+				    <c:when test="${Editable == true}">
+
+		                
+						<div id="error-message input-field" style="display: none;" class="error-message">
+						    Recipe name is already registered!
+						</div>
+				    </c:when>
+				    <c:otherwise>
+				        <p>Notice! - You are not the owner of this recipe.</p>
+				    </c:otherwise>
+				</c:choose>
                 
-				<div id="error-message input-field" style="display: none;" class="error-message">
-				    Recipe name is already registered!
-				</div>
+
 
             </form:form>
         </div>

@@ -360,7 +360,6 @@ public class HibernateSerializer implements ISerializer {
 
 	@Override
 	public User getUserByName(String username) throws NoUserException, IOException {
-		
 		Session session = factory.getCurrentSession();
 		session.beginTransaction();
 		try {		
@@ -412,6 +411,43 @@ public class HibernateSerializer implements ISerializer {
 		}
 	}	
 	
+	@Override
+	public List<Recipe> getAllPublicRecipes() throws IOException {
+		Session session = factory.getCurrentSession();
+		session.beginTransaction();
+		try {
+			Query<Recipe> getAllPublicRecipesQuery = session.createQuery(
+				    "FROM Recipe WHERE recipe_private = 0", Recipe.class);
+
+			return getAllPublicRecipesQuery.getResultList();
+		} catch (Exception e) {
+			throw new IOException("Something went wrong when accessing the database");
+		} finally {
+			session.close();
+		}
+	}
+	
+	@Override
+	public User getRecipeOwner(Recipe recipe) throws IOException {
+		Session session = factory.getCurrentSession();
+		session.beginTransaction();
+		try {
+			System.out.println("here also" + recipe.getId());
+			Query<User> getRecipeOwnerQuery = session.createQuery(
+				    "FROM User u WHERE u.id = (SELECT r.user.id FROM Recipe r WHERE r.id = :recipeId)",
+				    User.class
+			);
+			getRecipeOwnerQuery.setParameter("recipeId", recipe.getId());
+
+			System.out.println("here");
+
+			return getRecipeOwnerQuery.getSingleResult();
+		} catch (Exception e) {
+			throw new IOException("Something went wrong when accessing the database");
+		} finally {
+			session.close();
+		}
+	}
 	// THESE FUNCTIONS ARE NEVER USED
 	
 	@Override

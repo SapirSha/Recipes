@@ -40,6 +40,9 @@ public class Recipe implements Comparable<Recipe>, Cloneable, Serializable {
 	@Column(name = "recipe_instructions")
 	private String instructions;
 	
+	@Column(name = "recipe_private")
+	private short isPrivate;
+	
 	@Column(name = "date_added")
 	private Date dateAdded;
 	
@@ -54,6 +57,19 @@ public class Recipe implements Comparable<Recipe>, Cloneable, Serializable {
 	public Recipe() {}
 	
 	public Recipe(String name, String category, String description, String ingredients, String instructions,
+			Date dateAdded, Date dateLatestChange, short isPrivate) {
+		super();
+		this.name = name;
+		this.category = category;
+		this.description = description;
+		this.ingredients = ingredients;
+		this.instructions = instructions;
+		this.dateAdded = dateAdded;
+		this.dateLatestChange = dateLatestChange;
+		this.isPrivate = isPrivate;
+	}
+	
+	public Recipe(String name, String category, String description, String ingredients, String instructions,
 			Date dateAdded, Date dateLatestChange) {
 		super();
 		this.name = name;
@@ -63,6 +79,7 @@ public class Recipe implements Comparable<Recipe>, Cloneable, Serializable {
 		this.instructions = instructions;
 		this.dateAdded = dateAdded;
 		this.dateLatestChange = dateLatestChange;
+		this.isPrivate = 0;
 	}
 
 	public int getId() {
@@ -150,7 +167,7 @@ public class Recipe implements Comparable<Recipe>, Cloneable, Serializable {
 	public String toString() {
 		return "Recipe [id=" + id + ", name=" + name + ", category=" + category + ", description=" + description
 				+ ", ingredients=" + ingredients + ", instructions=" + instructions + ", dateAdded=" + dateAdded
-				+ ", dateLatestChange=" + dateLatestChange + "]";
+				+ ", dateLatestChange=" + dateLatestChange + ", private="+isPrivate+ "]";
 	}
 	
 	@Override
@@ -173,4 +190,14 @@ public class Recipe implements Comparable<Recipe>, Cloneable, Serializable {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
+	public short getIsPrivate() {
+		return isPrivate;
+	}
+
+	public void setIsPrivate(short isPrivate) {
+		this.isPrivate = isPrivate;
+	}
+	
+	
 }

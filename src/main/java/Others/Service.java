@@ -65,6 +65,10 @@ public class Service {
 	public List<Recipe> getAllRecipesFromCategory(User user, String category) throws NoUserException, IOException {
 		return serializer.getRecipesByCategory(user, category);
 	}
+	
+	public List<Recipe> getAllPublicRecipes() throws IOException{
+		return serializer.getAllPublicRecipes();
+	}
 
 	public void deleteRecipe(User user, Recipe recipe) throws InvalidRecipeException, NoRecipeException, IOException, NoUserException {
 		serializer.deleteRecipe(user, recipe);
@@ -94,6 +98,15 @@ public class Service {
 	
 	public void saveUser(User user) throws InvalidUserException, IOException {
 		serializer.saveUser(user);
+	}
+	
+	public User getRecipeOwner(Recipe recipe)  {
+		try {
+		return serializer.getRecipeOwner(recipe);
+		}
+		catch (IOException e) {
+			return null;
+		}
 	}
 
 	// VALIDATIONS //

@@ -63,7 +63,7 @@ public class RecipeController {
 	@RequestMapping("/ShowRecipe")
 	public String showRecipeDetails(@ModelAttribute("ShowRecipe") Recipe recipe,
 	        @RequestParam(value = "SaveError", required = false) String saveError,
-	        Model model) {
+	        Model model, HttpServletRequest request) {
 
 		if (saveError != null && "true".equals(saveError)) {
 			System.out.println("SAVE ERROR");
@@ -80,6 +80,11 @@ public class RecipeController {
 	    
 	    model.addAttribute("recipe", recipe);
 	    	    
+	    User current = (User)request.getSession().getAttribute("user");
+	    User owner = service.getRecipeOwner(recipe);
+	    
+	    model.addAttribute("Editable", current != null && current.equals(owner));
+	    
 	    return "RecipeDetails";
 	}
 

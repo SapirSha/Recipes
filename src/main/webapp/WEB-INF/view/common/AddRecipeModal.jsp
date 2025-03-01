@@ -37,9 +37,16 @@
                     <strong>Instructions:</strong>
                     <textarea id="new-recipe-instructions" name="instructions" class="input-field" oninput="autoExpandTextarea(event)" required="required"></textarea>
                 </div>
+				<div style="display: flex;">
+				    <label for="is_private" style="margin: 0; padding: 0;">Is Recipe Private? </label>
+				    <input type="checkbox" name="isPrivate" style="margin: 0 2%;" value=1 />
+				</div>			
                 <div class="edit-button">
+                
                     <button type="submit" class="save-btn">Add Recipe</button>
                 </div>
+
+                
                  
             <c:if test="${param.RecipeCreated eq 'false'}">
                 <div class="error-message">

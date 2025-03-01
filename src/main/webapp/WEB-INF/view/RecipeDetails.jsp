@@ -165,15 +165,26 @@ button:hover {
         });
     }
 
-    function goBack() {
-    	const contextPath = "${pageContext.request.contextPath}";
-    	window.location.href = contextPath + "/MyRecipes";
-    }
+
+   function goBack() {
+        const contextPath = "${pageContext.request.contextPath}";
+           let userElement = document.getElementById("EditableData");
+           let usersAreTheSame = userElement.dataset.usersAreTheSame === 'true';
+           if (usersAreTheSame) {
+               window.location.href = contextPath + "/MyRecipes";
+           } else {
+               window.location.href = contextPath + "/SearchRecipe";
+           }
+       }
     
 
     </script>
 </head>
 <body>
+<div id="EditableData" 
+     data-users-are-the-same="${Editable == true}" 
+     style="opacity: 0; display: none;">
+</div>
     <div class="recipe-editor">
         <div class="recipe-container">
             <h1>Recipe Details</h1>
@@ -209,17 +220,28 @@ button:hover {
                     <span class="display-value" id="display-instructions">${recipe.instructions}</span>
                     <form:textarea path="instructions" id="recipe-instructions" class="input-field" style="display:none;" oninput="autoExpandTextarea(event)"></form:textarea>
                 </div>
-                <div id="error-message" style="display: none;" class="error-message">
-				    Recipe name is already registered!
-				</div>
-                
-                <div class="edit-button">
-                    <button type="button" id="editButton" class="edit-btn" onclick="enterEditMode()">Edit</button>
-                    <button type="submit" id="saveButton" class="save-btn" style="display:none;">Save</button>
-                    <button type="button" id="cancelButton" class="cancel-btn" style="display:none;" onclick="cancelEditMode()">Cancel</button>
-                    <button type="button" id="returnButton" class="return-btn" onclick="goBack()">Return</button>
-                </div>
-                
+
+                 <c:choose>
+				    <c:when test="${Editable == true}">
+						<div id="error-message" style="display: none;" class="error-message">
+						    Recipe name is already registered!
+						</div>
+		                <div class="edit-button">
+		                    <button type="button" id="editButton" class="edit-btn" onclick="enterEditMode()">Edit</button>
+		                    <button type="submit" id="saveButton" class="save-btn" style="display:none;">Save</button>
+		                    <button type="button" id="cancelButton" class="cancel-btn" style="display:none;" onclick="cancelEditMode()">Cancel</button>
+		                    <button type="button" id="returnButton" class="return-btn" onclick="goBack()">Return</button>
+		                </div>
+		                
+				    </c:when>
+				    <c:otherwise>
+				    <div class="edit-button">
+				        <p>Notice! - You are not the owner of this recipe.</p>
+				        <button type="button" id="returnButton" class="return-btn" onclick="goBack()">Return</button>
+				     </div>
+				    </c:otherwise>
+				</c:choose>
+
                  <div class="editable">
                 <br>
                <div class="recipe-image">

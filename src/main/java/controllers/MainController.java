@@ -43,6 +43,10 @@ public class MainController {
 		
 		return "MainPage";
 	}
+	@RequestMapping("Home")
+	public String showPage(Model model, HttpServletRequest request) {
+		return "redirect:/";
+	}
 
     @RequestMapping("/MyRecipes")
 	public String showMyRecipesPage(Model model,
@@ -103,4 +107,24 @@ public class MainController {
     	
     	return "redirect:/";
     }
+    
+    
+    
+    @RequestMapping("/SearchRecipe")
+	public String showSearchRecipePage(Model model, HttpServletRequest request) {
+		List<Recipe> recipeList;
+		try {
+			recipeList = service.getAllPublicRecipes();
+		} catch (IOException e) {
+			return "redirect:/";
+		}
+		
+		for (Recipe r : recipeList) {
+			System.out.println(r);
+		}
+		
+		model.addAttribute("recipeList", recipeList);
+    	
+		return "SearchRecipe";
+	}
 }

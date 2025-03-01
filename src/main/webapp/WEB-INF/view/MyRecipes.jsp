@@ -104,11 +104,11 @@ justify-content: right;
     <%@ include file="common/header.jsp" %>
     <%@ include file="common/LoginSignupModal.jsp" %>
     
-        <%@ include file="common/AddRecipeModal.jsp" %>
+    <%@ include file="common/AddRecipeModal.jsp" %>
 
 
     <div class="content">
-        <h1>My Recipes Page</h1>
+        <h1>My Recipes</h1>
         
         <br>
         <br>
